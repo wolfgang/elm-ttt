@@ -37,25 +37,11 @@ drawDebugText model =
 drawCellAt : (Int, Int) -> Model -> Form
 drawCellAt (row, col) model = 
     let 
-        cellRect = getCellRectAt (row, col) model
+        cellRect = Board.getCellRectAt (row, col) model
     in 
         rect cellRect.size cellRect.size
             |> filled model.gridSettings.cellBaseColor
             |> move (toCollageCoords cellRect model)
-
-getCellRectAt : (Int, Int) -> Model -> CellRect
-
-getCellRectAt (row, col) model =
-    let 
-        gs = model.gridSettings
-        cellSize = (gs.size - gs.gridLineThickness)/3
-        cellX = (cellSize + gs.gridLineThickness/2)*(toFloat row)
-        cellY = (cellSize + gs.gridLineThickness/2)*(toFloat col)
-    in 
-        { 
-            position = (cellX, cellY), 
-            size = cellSize 
-        }
 
 toCollageCoords : CellRect -> Model -> (Float, Float)
 toCollageCoords rect model = 
