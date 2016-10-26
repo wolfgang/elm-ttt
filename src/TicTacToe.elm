@@ -1,20 +1,22 @@
 import Html exposing (Html)
-import Html.App as Html
+import Html.App as App
+
 import Collage exposing (collage, rect, filled, move, Form)
 import Color exposing (Color, rgb)
 import Element exposing (toHtml)
 
 
 main =
-  Html.beginnerProgram
-    { model = gModel
-    , view = view
-    , update = update
+  App.program
+    { 
+        init = init, 
+        view = view, 
+        update = update, 
+        subscriptions = (\_ -> Sub.batch [])
     }
 
 type Msg
   = NoOp
-
 
 type alias Model = {
     gridSettings: {
@@ -30,19 +32,23 @@ type alias CellScreenRect = {
     screenSize: Float
 }
 
+init : (Model, Cmd Msg)
+init =
+  (
+    {
+        gridSettings = {
+            size = 600,
+            gridLineColor = rgb 0 0 0,
+            gridLineThickness = 20,
+            cellBaseColor = rgb 255 255 255
+        }
+    },
+    Cmd.none
+  )
 
-gModel : Model
-gModel = {
-    gridSettings = {
-        size = 600,
-        gridLineColor = rgb 0 0 0,
-        gridLineThickness = 20,
-        cellBaseColor = rgb 255 255 255
-    } }
 
-
-update : Msg -> Model -> Model
-update msg model = model
+update : Msg -> Model -> (Model, Cmd Msg)
+update msg model = (model, Cmd.none)
 
 
 getCellScreenRectAt : (Int, Int) -> Model -> CellScreenRect
