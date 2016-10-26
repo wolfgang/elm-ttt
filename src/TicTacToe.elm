@@ -27,7 +27,8 @@ init =
             gridLineThickness = 20,
             cellBaseColor = rgb 255 255 255
         },
-        mousePosition = (0, 0)
+        mousePosition = (0, 0),
+        highlightedCell = Nothing
 
     },
     Cmd.none

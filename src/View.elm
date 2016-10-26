@@ -7,8 +7,8 @@ import Color exposing (Color, rgb)
 import Element exposing (toHtml)
 import String
 import Text
-import Model exposing (Model)
-import Board exposing (CellRect)
+import Model exposing (Model, CellRect)
+import Board
 
 draw : Model -> Html msg
 draw model = 

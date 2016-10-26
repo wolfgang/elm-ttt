@@ -1,6 +1,10 @@
-module Model exposing(Model)
+module Model exposing (Model, CellRect)
 import Color exposing (Color)
 
+type alias CellRect = {
+    position : (Float, Float),
+    size: Float
+}
 
 type alias Model = {
     gridSettings: {
@@ -9,5 +13,6 @@ type alias Model = {
         gridLineThickness: Float,
         cellBaseColor: Color
     },
-    mousePosition: (Float, Float)
+    mousePosition: (Float, Float),
+    highlightedCell: Maybe CellRect
 }
