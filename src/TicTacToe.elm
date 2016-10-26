@@ -7,7 +7,6 @@ import View
 
 import Msg exposing (Msg(..))
 
-
 main =
   App.program
     { 
@@ -25,7 +24,8 @@ init =
             size = 600,
             gridLineColor = rgb 0 0 0,
             gridLineThickness = 20,
-            cellBaseColor = rgb 255 255 255
+            cellBaseColor = rgb 255 255 255,
+            cellHighlightColor = rgb 200 200 200
         },
         mousePosition = (0, 0),
         highlightedCell = Nothing

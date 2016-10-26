@@ -11,8 +11,9 @@ type alias Model = {
         size: Float,
         gridLineColor: Color,
         gridLineThickness: Float,
-        cellBaseColor: Color
+        cellBaseColor: Color,
+        cellHighlightColor: Color
     },
     mousePosition: (Float, Float),
-    highlightedCell: Maybe CellRect
+    highlightedCell: Maybe (Int, Int)
 }

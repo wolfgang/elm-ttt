@@ -20,6 +20,7 @@ draw model =
             (
                 drawBackground model
                 ++ drawCells model
+                ++ drawHighlightedCell model
                 ++ drawDebugText model
             )
 
@@ -29,18 +30,24 @@ drawBackground model =
 
 drawCells : Model -> List Form
 drawCells model = 
-    List.map (\coord -> drawCellAt coord model) Board.cellCoords
+    List.map (\coord -> drawCellAt coord model.gridSettings.cellBaseColor model) Board.cellCoords
+
+drawHighlightedCell : Model -> List Form
+drawHighlightedCell model = 
+    case model.highlightedCell of
+        Nothing -> []
+        Just coords -> [drawCellAt coords model.gridSettings.cellHighlightColor model]
 
 drawDebugText model = 
     [ debugPrintAt (0, 0) (toString model.mousePosition)]
 
-drawCellAt : (Int, Int) -> Model -> Form
-drawCellAt (row, col) model = 
+drawCellAt : (Int, Int) -> Color -> Model -> Form
+drawCellAt (row, col) color model = 
     let 
         cellRect = Board.getCellRectAt (row, col) model
     in 
         rect cellRect.size cellRect.size
-            |> filled model.gridSettings.cellBaseColor
+            |> filled color
             |> move (toCollageCoords cellRect model)
 
 toCollageCoords : CellRect -> Model -> (Float, Float)
