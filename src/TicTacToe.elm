@@ -4,19 +4,23 @@ import Html.App as App
 import Collage exposing (collage, rect, filled, move, Form)
 import Color exposing (Color, rgb)
 import Element exposing (toHtml)
+import Mouse
+import String
+import Text
 
 
 main =
   App.program
     { 
         init = init, 
-        view = view, 
         update = update, 
-        subscriptions = (\_ -> Sub.batch [])
+        view = view, 
+        subscriptions = subscriptions
     }
 
 type Msg
   = NoOp
+  | MouseMoved Mouse.Position
 
 type alias Model = {
     gridSettings: {
@@ -24,7 +28,8 @@ type alias Model = {
         gridLineColor: Color,
         gridLineThickness: Float,
         cellBaseColor: Color
-    }
+    },
+    mousePosition: Mouse.Position
 }
 
 type alias CellScreenRect = {
@@ -41,14 +46,41 @@ init =
             gridLineColor = rgb 0 0 0,
             gridLineThickness = 20,
             cellBaseColor = rgb 255 255 255
-        }
+        },
+        mousePosition= { x = 0, y = 0}
+
     },
     Cmd.none
   )
 
 
 update : Msg -> Model -> (Model, Cmd Msg)
-update msg model = (model, Cmd.none)
+update msg model = 
+  case msg of
+    NoOp -> (model, Cmd.none)
+    MouseMoved position -> 
+            ({ model | mousePosition = position }, Cmd.none)
+
+view : Model -> Html msg
+view model = 
+    toHtml <| 
+        let 
+            gs = model.gridSettings
+
+        in 
+            collage (round gs.size) (round gs.size)
+            (
+                [ rect gs.size gs.size |> filled gs.gridLineColor ] 
+                ++ (drawCells model)
+                ++ [ (debugPrintAt (0, 0) (toString model.mousePosition)) ]
+            )
+
+
+subscriptions : Model -> Sub Msg
+subscriptions model = Mouse.moves onMouseMove
+
+onMouseMove : Mouse.Position -> Msg
+onMouseMove position = MouseMoved position
 
 
 getCellScreenRectAt : (Int, Int) -> Model -> CellScreenRect
@@ -85,15 +117,17 @@ drawCells model =
         List.map (\coord -> drawCellAt coord model) coords
 
 
+debugPrintAt pos string =
+  let
+    textWidth = (toFloat (String.length string)*4)
+  in
+    Text.fromString string
+    |> Text.color Color.black
+    |> Text.monospace
+    |> Text.height 12
+    |> Element.leftAligned
+    |> Collage.toForm
+    |> move pos
 
 
-view : Model -> Html msg
-view model = 
-    toHtml <| 
-        let 
-            gs = model.gridSettings
-
-        in 
-            collage (round gs.size) (round gs.size)
-            ([ rect gs.size gs.size |> filled gs.gridLineColor ] ++ (drawCells model))
 
