@@ -33,16 +33,7 @@ drawBackground model =
     in [ rect gs.size gs.size |> filled gs.gridLineColor ] 
 
 drawDebugText model = 
-    [ debugPrintAt (0, 0) (toString (mousePosToCollage model))]
-
-mousePosToCollage : Model -> (Float, Float)
-mousePosToCollage model = 
-    let 
-        mp = model.mousePosition
-        gs = model.gridSettings
-    in
-        toCollage model.mousePosition gs.size
-
+    [ debugPrintAt (0, 0) (toString model.mousePosition)]
 
 getCellRectAt : (Int, Int) -> Model -> CellScreenRect
 
@@ -54,7 +45,7 @@ getCellRectAt (row, col) model =
         cellY = (cellSize + gs.gridLineThickness/2)*(toFloat col)
     in 
         { 
-            screenCoords = (toCollage (cellX + cellSize/2, cellY + cellSize/2) gs.size), 
+            screenCoords = (cellX + cellSize/2, cellY + cellSize/2), 
             screenSize = cellSize 
         }
 
@@ -69,7 +60,7 @@ drawCellAt (row, col) model =
     in 
         rect screenRect.screenSize screenRect.screenSize
             |> filled model.gridSettings.cellBaseColor
-            |> move screenRect.screenCoords
+            |> move (toCollage screenRect.screenCoords model.gridSettings.size)
 
 drawCells : Model -> List Form
 drawCells model = 
