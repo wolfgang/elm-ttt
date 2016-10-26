@@ -72,11 +72,17 @@ view model =
         in 
             collage (round gs.size) (round gs.size)
             (
-                [ rect gs.size gs.size |> filled gs.gridLineColor ] 
-                ++ (drawCells model)
-                ++ [ debugPrintAt (0, 0) (toString (mousePosToCollage model)) ]
+                drawBackground model
+                ++ drawCells model
+                ++ drawDebugText model
             )
 
+drawBackground model =
+    let gs = model.gridSettings
+    in [ rect gs.size gs.size |> filled gs.gridLineColor ] 
+
+drawDebugText model = 
+    [ debugPrintAt (0, 0) (toString (mousePosToCollage model))]
 
 mousePosToCollage : Model -> (Float, Float)
 mousePosToCollage model = 
