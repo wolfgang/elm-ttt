@@ -1,4 +1,4 @@
-module Cell exposing (setHighlightedCell)
+module CellUI exposing (setHighlightedCell)
 import Model exposing (Model)
 import Board exposing (CellRect)
 

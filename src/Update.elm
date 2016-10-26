@@ -2,7 +2,7 @@ module Update exposing (update)
 import Msg exposing (Msg(..))
 import Model exposing (Model)
 import Board
-import Cell
+import CellUI
 
 
 update : Msg -> Model -> (Model, Cmd Msg)
@@ -17,5 +17,5 @@ update msg model =
                     highlightedCell = Nothing
                 }
         in
-            (Cell.setHighlightedCell newModel, Cmd.none)
+            (CellUI.setHighlightedCell newModel, Cmd.none)
 
