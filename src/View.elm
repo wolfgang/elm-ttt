@@ -7,12 +7,8 @@ import Color exposing (Color, rgb)
 import Element exposing (toHtml)
 import String
 import Text
-import Model exposing(Model)
-
-type alias CellRect = {
-    position : (Float, Float),
-    size: Float
-}
+import Model exposing (Model)
+import Board exposing (CellRect)
 
 draw : Model -> Html msg
 draw model = 
@@ -33,14 +29,7 @@ drawBackground model =
 
 drawCells : Model -> List Form
 drawCells model = 
-    let 
-        coords = [
-            (0, 0), (1, 0), (2, 0), 
-            (0, 1), (1, 1), (2, 1), 
-            (0, 2), (1, 2), (2, 2)
-        ]
-    in
-        List.map (\coord -> drawCellAt coord model) coords
+    List.map (\coord -> drawCellAt coord model) Board.cellCoords
 
 drawDebugText model = 
     [ debugPrintAt (0, 0) (toString model.mousePosition)]
