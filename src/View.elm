@@ -31,8 +31,28 @@ drawBackground model =
     let gs = model.gridSettings
     in [ rect gs.size gs.size |> filled gs.gridLineColor ] 
 
+drawCells : Model -> List Form
+drawCells model = 
+    let 
+        coords = [
+            (0, 0), (1, 0), (2, 0), 
+            (0, 1), (1, 1), (2, 1), 
+            (0, 2), (1, 2), (2, 2)
+        ]
+    in
+        List.map (\coord -> drawCellAt coord model) coords
+
 drawDebugText model = 
     [ debugPrintAt (0, 0) (toString model.mousePosition)]
+
+drawCellAt : (Int, Int) -> Model -> Form
+drawCellAt (row, col) model = 
+    let 
+        cellRect = getCellRectAt (row, col) model
+    in 
+        rect cellRect.size cellRect.size
+            |> filled model.gridSettings.cellBaseColor
+            |> move (toCollageCoords cellRect model)
 
 getCellRectAt : (Int, Int) -> Model -> CellRect
 
@@ -48,32 +68,12 @@ getCellRectAt (row, col) model =
             size = cellSize 
         }
 
-drawCellAt : (Int, Int) -> Model -> Form
-drawCellAt (row, col) model = 
-    let 
-        screenRect = getCellRectAt (row, col) model
-    in 
-        rect screenRect.size screenRect.size
-            |> filled model.gridSettings.cellBaseColor
-            |> move (toCollageCoords screenRect model)
-
 toCollageCoords : CellRect -> Model -> (Float, Float)
 toCollageCoords rect model = 
     let 
         gridSize = model.gridSettings.size
         (x, y) = rect.position
     in (x - gridSize/2 + rect.size/2, -(y - gridSize/2 + rect.size/2))
-
-drawCells : Model -> List Form
-drawCells model = 
-    let 
-        coords = [
-            (0, 0), (1, 0), (2, 0), 
-            (0, 1), (1, 1), (2, 1), 
-            (0, 2), (1, 2), (2, 2)
-        ]
-    in
-        List.map (\coord -> drawCellAt coord model) coords
 
 debugPrintAt pos string =
   let
@@ -86,6 +86,3 @@ debugPrintAt pos string =
     |> Element.leftAligned
     |> Collage.toForm
     |> move pos
-
-
-
