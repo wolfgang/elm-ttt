@@ -29,7 +29,7 @@ type alias Model = {
         gridLineThickness: Float,
         cellBaseColor: Color
     },
-    mousePosition: Mouse.Position
+    mousePosition: (Float, Float)
 }
 
 type alias CellScreenRect = {
@@ -47,7 +47,7 @@ init =
             gridLineThickness = 20,
             cellBaseColor = rgb 255 255 255
         },
-        mousePosition= { x = 0, y = 0}
+        mousePosition = (0, 0)
 
     },
     Cmd.none
@@ -59,22 +59,32 @@ update msg model =
   case msg of
     NoOp -> (model, Cmd.none)
     MouseMoved position -> 
-            ({ model | mousePosition = position }, Cmd.none)
+        (
+            { model | mousePosition = (toFloat position.x, toFloat position.y) }, 
+            Cmd.none
+        )
 
 view : Model -> Html msg
 view model = 
     toHtml <| 
         let 
             gs = model.gridSettings
-
         in 
             collage (round gs.size) (round gs.size)
             (
                 [ rect gs.size gs.size |> filled gs.gridLineColor ] 
                 ++ (drawCells model)
-                ++ [ (debugPrintAt (0, 0) (toString model.mousePosition)) ]
+                ++ [ debugPrintAt (0, 0) (toString (mousePosToCollage model)) ]
             )
 
+
+mousePosToCollage : Model -> (Float, Float)
+mousePosToCollage model = 
+    let 
+        mp = model.mousePosition
+        gs = model.gridSettings
+    in
+        toCollage model.mousePosition gs.size
 
 subscriptions : Model -> Sub Msg
 subscriptions model = Mouse.moves onMouseMove
@@ -83,23 +93,28 @@ onMouseMove : Mouse.Position -> Msg
 onMouseMove position = MouseMoved position
 
 
-getCellScreenRectAt : (Int, Int) -> Model -> CellScreenRect
+getCellRectAt : (Int, Int) -> Model -> CellScreenRect
 
-getCellScreenRectAt (row, col) model =
+getCellRectAt (row, col) model =
     let 
         gs = model.gridSettings
         cellSize = (gs.size - gs.gridLineThickness)/3
         cellX = (cellSize + gs.gridLineThickness/2)*(toFloat row)
         cellY = (cellSize + gs.gridLineThickness/2)*(toFloat col)
-        (baseX, baseY) = (-gs.size/2 + cellSize/2, gs.size/2 - cellSize/2)
-
     in 
-        { screenCoords = (cellX + baseX, -cellY + baseY), screenSize = cellSize }
+        { 
+            screenCoords = (toCollage (cellX + cellSize/2, cellY + cellSize/2) gs.size), 
+            screenSize = cellSize 
+        }
+
+
+toCollage (x, y) gridSize = 
+    (x - gridSize/2, -(y - gridSize/2))
 
 drawCellAt : (Int, Int) -> Model -> Form
 drawCellAt (row, col) model = 
     let 
-        screenRect = getCellScreenRectAt (row, col) model
+        screenRect = getCellRectAt (row, col) model
     in 
         rect screenRect.screenSize screenRect.screenSize
             |> filled model.gridSettings.cellBaseColor
