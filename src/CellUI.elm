@@ -4,10 +4,7 @@ import Board exposing (CellRect)
 
 setHighlightedCell : Model -> Model
 setHighlightedCell model =
-    List.foldr 
-        setHighlightedCellAt
-        model 
-        Board.cellCoords
+    List.foldr setHighlightedCellAt model Board.cellCoords
 --  setHighlightedCell2 Board.cellCoords model
 
 setHighlightedCellAt : (Int, Int) -> Model -> Model
@@ -30,7 +27,6 @@ cellContainsPoint cell (x, y) =
         x <= cellX + cellSize  &&
         y >= cellY &&
         y <= cellY + cellSize
-
 
 -- Alternative implementation using recursion for early exit
 

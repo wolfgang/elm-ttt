@@ -30,13 +30,17 @@ drawBackground model =
 
 drawCells : Model -> List Form
 drawCells model = 
-    List.map (\coord -> drawCellAt coord model.gridSettings.cellBaseColor model) Board.cellCoords
+    let gs = model.gridSettings
+    in
+        List.map (\coord -> drawCellAt coord gs.cellBaseColor model) Board.cellCoords
 
 drawHighlightedCell : Model -> List Form
 drawHighlightedCell model = 
     case model.highlightedCell of
         Nothing -> []
-        Just coords -> [drawCellAt coords model.gridSettings.cellHighlightColor model]
+        Just coords -> 
+            let gs = model.gridSettings
+            in [drawCellAt coords gs.cellHighlightColor model]
 
 drawDebugText model = 
     [ debugPrintAt (0, 0) (toString model.mousePosition)]
