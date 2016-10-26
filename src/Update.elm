@@ -1,6 +1,6 @@
 module Update exposing (update)
 import Msg exposing (Msg(..))
-import Model exposing (Model, CellRect)
+import Model exposing (Model)
 import Board
 import Cell
 

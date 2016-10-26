@@ -1,14 +1,14 @@
 module View exposing(draw)
 
 import Html exposing (Html)
+import String
+import Text
 
 import Collage exposing (collage, rect, filled, move, Form)
 import Color exposing (Color, rgb)
 import Element exposing (toHtml)
-import String
-import Text
-import Model exposing (Model, CellRect)
-import Board
+import Model exposing (Model)
+import Board exposing (CellRect)
 
 draw : Model -> Html msg
 draw model = 

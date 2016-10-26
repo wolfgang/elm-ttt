@@ -1,6 +1,7 @@
 module Cell exposing (setHighlightedCell)
-import Model exposing (Model, CellRect)
-import Board
+import Model exposing (Model)
+import Board exposing (CellRect)
+
 
 cellContainsPoint : CellRect -> (Float, Float) -> Bool
 cellContainsPoint cell (x, y) = 

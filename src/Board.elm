@@ -1,6 +1,10 @@
-module Board exposing (cellCoords, getCellRectAt)
-import Model exposing (Model, CellRect)
+module Board exposing (CellRect, cellCoords, getCellRectAt)
+import Model exposing (Model)
 
+type alias CellRect = {
+    position : (Float, Float),
+    size: Float
+}
 
 cellCoords : List (Int, Int)
 cellCoords = 

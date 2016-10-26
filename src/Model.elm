@@ -1,10 +1,5 @@
-module Model exposing (Model, CellRect)
+module Model exposing (Model)
 import Color exposing (Color)
-
-type alias CellRect = {
-    position : (Float, Float),
-    size: Float
-}
 
 type alias Model = {
     gridSettings: {
