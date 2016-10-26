@@ -9,11 +9,10 @@ import String
 import Text
 import Model exposing(Model)
 
-type alias CellScreenRect = {
-    screenCoords : (Float, Float),
-    screenSize: Float
+type alias CellRect = {
+    position : (Float, Float),
+    size: Float
 }
-
 
 draw : Model -> Html msg
 draw model = 
@@ -35,7 +34,7 @@ drawBackground model =
 drawDebugText model = 
     [ debugPrintAt (0, 0) (toString model.mousePosition)]
 
-getCellRectAt : (Int, Int) -> Model -> CellScreenRect
+getCellRectAt : (Int, Int) -> Model -> CellRect
 
 getCellRectAt (row, col) model =
     let 
@@ -45,22 +44,25 @@ getCellRectAt (row, col) model =
         cellY = (cellSize + gs.gridLineThickness/2)*(toFloat col)
     in 
         { 
-            screenCoords = (cellX + cellSize/2, cellY + cellSize/2), 
-            screenSize = cellSize 
+            position = (cellX, cellY), 
+            size = cellSize 
         }
-
-
-toCollage (x, y) gridSize = 
-    (x - gridSize/2, -(y - gridSize/2))
 
 drawCellAt : (Int, Int) -> Model -> Form
 drawCellAt (row, col) model = 
     let 
         screenRect = getCellRectAt (row, col) model
     in 
-        rect screenRect.screenSize screenRect.screenSize
+        rect screenRect.size screenRect.size
             |> filled model.gridSettings.cellBaseColor
-            |> move (toCollage screenRect.screenCoords model.gridSettings.size)
+            |> move (toCollageCoords screenRect model)
+
+toCollageCoords : CellRect -> Model -> (Float, Float)
+toCollageCoords rect model = 
+    let 
+        gridSize = model.gridSettings.size
+        (x, y) = rect.position
+    in (x - gridSize/2 + rect.size/2, -(y - gridSize/2 + rect.size/2))
 
 drawCells : Model -> List Form
 drawCells model = 
@@ -72,7 +74,6 @@ drawCells model =
         ]
     in
         List.map (\coord -> drawCellAt coord model) coords
-
 
 debugPrintAt pos string =
   let
