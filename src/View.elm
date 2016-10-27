@@ -51,7 +51,7 @@ drawOccupiedCell coords model =
         let 
             cellRect = Board.getCellRectAt coords model
         in 
-            drawShapeInCellAt coords (circle (cellRect.size/2)) Color.red model
+            drawShapeInCellRect cellRect (circle (cellRect.size/2)) Color.red model
 
 
 drawHighlightedCell : Model -> List Form
@@ -70,14 +70,11 @@ drawCellAt (row, col) color model =
     let 
         cellRect = Board.getCellRectAt (row, col) model
     in 
-        drawShapeInCellAt (row, col) (rect cellRect.size cellRect.size) color model
+        drawShapeInCellRect cellRect (rect cellRect.size cellRect.size) color model
 
 
-drawShapeInCellAt : (Int, Int) -> Shape -> Color -> Model -> Form
-drawShapeInCellAt (row, col) shape color model = 
-    let 
-        cellRect = Board.getCellRectAt (row, col) model
-    in 
+drawShapeInCellRect : CellRect -> Shape -> Color -> Model -> Form
+drawShapeInCellRect cellRect shape color model = 
         shape
             |> filled color
             |> move (toCollageCoords cellRect model)
