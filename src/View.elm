@@ -4,7 +4,7 @@ import Html exposing (Html)
 import String
 import Text
 
-import Collage exposing (collage, rect, circle, filled, move, Shape, Form)
+import Collage exposing (collage, rect, circle, filled, move, outlined, solid, Shape, Form)
 import Color exposing (Color, rgb)
 import Element exposing (toHtml)
 import Model exposing (Model, CellState(..))
@@ -50,8 +50,9 @@ drawOccupiedCell : (Int, Int) -> Model -> Form
 drawOccupiedCell coords model =
         let 
             cellRect = Board.getCellRectAt coords model
+            baseLineStyle  = solid Color.black
         in 
-            drawShapeInCellRect cellRect (circle (cellRect.size/2)) Color.red model
+            drawShapeInCellRect cellRect (circle (cellRect.size/3)) (outlined { baseLineStyle | width = 8 }) model
 
 
 drawHighlightedCell : Model -> List Form
@@ -70,13 +71,13 @@ drawCellAt (row, col) color model =
     let 
         cellRect = Board.getCellRectAt (row, col) model
     in 
-        drawShapeInCellRect cellRect (rect cellRect.size cellRect.size) color model
+        drawShapeInCellRect cellRect (rect cellRect.size cellRect.size) (filled color) model
 
 
-drawShapeInCellRect : CellRect -> Shape -> Color -> Model -> Form
-drawShapeInCellRect cellRect shape color model = 
+drawShapeInCellRect : CellRect -> Shape -> (Shape -> Form) -> Model -> Form
+drawShapeInCellRect cellRect shape styleFn model = 
         shape
-            |> filled color
+            |> styleFn
             |> move (toCollageCoords cellRect model)
 
 
