@@ -7,7 +7,7 @@ import Text
 import Collage exposing (collage, rect, filled, move, Form)
 import Color exposing (Color, rgb)
 import Element exposing (toHtml)
-import Model exposing (Model)
+import Model exposing (Model, CellState(..))
 import Board exposing (CellRect)
 
 draw : Model -> Html msg
@@ -19,7 +19,8 @@ draw model =
             collage (round gs.size) (round gs.size)
             (
                 drawBackground model
-                ++ drawCells model
+                ++ drawBaseCells model
+                ++ drawOccupiedCells model
                 ++ drawHighlightedCell model
                 ++ drawDebugText model
             )
@@ -28,11 +29,22 @@ drawBackground model =
     let gs = model.gridSettings
     in [ rect gs.size gs.size |> filled gs.gridLineColor ] 
 
-drawCells : Model -> List Form
-drawCells model = 
+drawBaseCells : Model -> List Form
+drawBaseCells model = 
     let gs = model.gridSettings
     in
         List.map (\cell -> drawCellAt cell.coords gs.cellBaseColor model) model.board
+
+
+drawOccupiedCells : Model -> List Form
+drawOccupiedCells model =
+    List.foldr (
+        \cell rects -> 
+            if (cell.state == Empty) then rects
+            else rects ++ [(drawCellAt cell.coords Color.red model)]
+        )
+        []
+        model.board
 
 drawHighlightedCell : Model -> List Form
 drawHighlightedCell model = 

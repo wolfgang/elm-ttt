@@ -39,7 +39,9 @@ init =
 initializeBoard : List Cell
 initializeBoard = 
     List.map 
-        (\coords -> { coords = coords, state = Empty })
+        (\coords -> 
+            if coords == (1, 0) then { coords = coords, state = O_ }
+            else { coords = coords, state = Empty })
         Board.cellCoords
 
 subscriptions : Model -> Sub Msg
