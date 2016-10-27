@@ -4,7 +4,7 @@ import Html exposing (Html)
 import String
 import Text
 
-import Collage exposing (collage, rect, filled, move, Form)
+import Collage exposing (collage, rect, circle, filled, move, Shape, Form)
 import Color exposing (Color, rgb)
 import Element exposing (toHtml)
 import Model exposing (Model, CellState(..))
@@ -41,10 +41,18 @@ drawOccupiedCells model =
     List.foldr (
         \cell rects -> 
             if (cell.state == Empty) then rects
-            else rects ++ [(drawCellAt cell.coords Color.red model)]
+            else rects ++ [(drawOccupiedCell cell.coords model)]
         )
         []
         model.board
+
+drawOccupiedCell : (Int, Int) -> Model -> Form
+drawOccupiedCell coords model =
+        let 
+            cellRect = Board.getCellRectAt coords model
+        in 
+            drawShapeInCellAt coords (circle (cellRect.size/2)) Color.red model
+
 
 drawHighlightedCell : Model -> List Form
 drawHighlightedCell model = 
@@ -62,9 +70,18 @@ drawCellAt (row, col) color model =
     let 
         cellRect = Board.getCellRectAt (row, col) model
     in 
-        rect cellRect.size cellRect.size
+        drawShapeInCellAt (row, col) (rect cellRect.size cellRect.size) color model
+
+
+drawShapeInCellAt : (Int, Int) -> Shape -> Color -> Model -> Form
+drawShapeInCellAt (row, col) shape color model = 
+    let 
+        cellRect = Board.getCellRectAt (row, col) model
+    in 
+        shape
             |> filled color
             |> move (toCollageCoords cellRect model)
+
 
 toCollageCoords : CellRect -> Model -> (Float, Float)
 toCollageCoords rect model = 
