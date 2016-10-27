@@ -1,9 +1,10 @@
 import Html.App as App
 import Color exposing (rgb)
 import Mouse
-import Model exposing (Model)
+import Model exposing (Model, Cell, CellState(..))
 import Update
 import View 
+import Board
 
 import Msg exposing (Msg(..))
 
@@ -28,11 +29,18 @@ init =
             cellHighlightColor = rgb 200 200 200
         },
         mousePosition = (0, 0),
-        highlightedCell = Nothing
+        highlightedCell = Nothing,
+        board = initializeBoard
 
     },
     Cmd.none
   )
+
+initializeBoard : List Cell
+initializeBoard = 
+    List.map 
+        (\coords -> { coords = coords, state = Empty })
+        Board.cellCoords
 
 subscriptions : Model -> Sub Msg
 subscriptions model = Mouse.moves (\position -> MouseMoved position)

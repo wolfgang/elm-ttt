@@ -32,7 +32,7 @@ drawCells : Model -> List Form
 drawCells model = 
     let gs = model.gridSettings
     in
-        List.map (\coord -> drawCellAt coord gs.cellBaseColor model) Board.cellCoords
+        List.map (\cell -> drawCellAt cell.coords gs.cellBaseColor model) model.board
 
 drawHighlightedCell : Model -> List Form
 drawHighlightedCell model = 
