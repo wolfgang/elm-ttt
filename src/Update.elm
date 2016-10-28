@@ -1,6 +1,6 @@
 module Update exposing (update)
 import Msg exposing (Msg(..))
-import Model exposing (Model, Cell, CellState(..))
+import Model exposing (Model, CellState(X_))
 import Board
 import CellUI
 
@@ -23,6 +23,6 @@ update msg model =
         case model.highlightedCell of
             Nothing -> (model, Cmd.none)
             Just coords -> 
-                let newModel = CellUI.setCellState X_ coords model
+                let newModel = Board.setCellState X_ coords model
                 in 
                     ({ newModel | highlightedCell = Nothing }, Cmd.none)

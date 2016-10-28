@@ -1,5 +1,5 @@
-module Board exposing (CellRect, cellCoords, getCellRectAt)
-import Model exposing (Model)
+module Board exposing (CellRect, cellCoords, getCellRectAt, setCellState)
+import Model exposing (Model, Cell, CellState)
 
 type alias CellRect = {
     position : (Float, Float),
@@ -26,3 +26,15 @@ getCellRectAt (row, col) model =
             position = (cellX, cellY), 
             size = cellSize 
         }
+
+setCellState : CellState -> (Int,Int) -> Model -> Model
+setCellState state coords model =
+    { model | board = List.map (\cell -> setStateOfCell cell coords state) model.board}
+
+setStateOfCell : Cell -> (Int, Int) -> CellState -> Cell
+setStateOfCell cell wantedCoords wantedState =
+    if cell.coords == wantedCoords then
+        { cell | state = wantedState }
+    else
+        cell
+
