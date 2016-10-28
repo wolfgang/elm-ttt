@@ -1,6 +1,6 @@
 module Update exposing (update)
 import Msg exposing (Msg(..))
-import Model exposing (Model)
+import Model exposing (Model, Cell, CellState(..))
 import Board
 import CellUI
 
@@ -19,3 +19,7 @@ update msg model =
         in
             (CellUI.setHighlightedCell newModel, Cmd.none)
 
+    MouseClicked position -> 
+        case model.highlightedCell of
+            Nothing -> (model, Cmd.none)
+            Just coords -> (CellUI.setCellState X_ coords model, Cmd.none)

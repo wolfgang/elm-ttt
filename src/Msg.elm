@@ -4,3 +4,4 @@ import Mouse
 type Msg
   = NoOp
   | MouseMoved Mouse.Position
+  | MouseClicked Mouse.Position

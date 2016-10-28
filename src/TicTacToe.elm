@@ -51,7 +51,8 @@ subscriptions : Model -> Sub Msg
 subscriptions =
     (\_ -> Sub.batch 
         [ 
-            Mouse.moves MouseMoved
+            Mouse.moves MouseMoved,
+            Mouse.clicks MouseClicked
         ]
     )
 

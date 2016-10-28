@@ -1,11 +1,14 @@
-module CellUI exposing (setHighlightedCell)
-import Model exposing (Model)
+module CellUI exposing (setHighlightedCell, setCellState)
+import Model exposing (Model, Cell, CellState)
 import Board exposing (CellRect)
 
 setHighlightedCell : Model -> Model
 setHighlightedCell model =
     List.foldr setHighlightedCellAt model Board.cellCoords
---  setHighlightedCell2 Board.cellCoords model
+
+setCellState : CellState -> (Int,Int) -> Model -> Model
+setCellState state coords model =
+    { model | board = List.map (\cell -> setStateOfCell cell coords state) model.board}
 
 setHighlightedCellAt : (Int, Int) -> Model -> Model
 setHighlightedCellAt cellCoords model =
@@ -46,3 +49,10 @@ tailOrEmptyList list =
     case List.tail list of
         Nothing -> []
         Just tail -> tail
+
+setStateOfCell : Cell -> (Int, Int) -> CellState -> Cell
+setStateOfCell cell wantedCoords wantedState =
+    if cell.coords == wantedCoords then
+        { cell | state = wantedState }
+    else
+        cell
