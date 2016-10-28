@@ -41,6 +41,7 @@ initializeBoard =
     List.map 
         (\coords -> 
             if coords == (1, 0) then { coords = coords, state = O_ }
+            else if coords == (2, 2) then { coords = coords, state = X_ }
             else { coords = coords, state = Empty })
         Board.cellCoords
 

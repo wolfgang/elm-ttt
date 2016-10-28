@@ -4,10 +4,10 @@ import Html exposing (Html)
 import String
 import Text
 
-import Collage exposing (collage, rect, circle, filled, move, outlined, solid, Shape, Form)
+import Collage exposing (..)
 import Color exposing (Color, rgb)
 import Element exposing (toHtml)
-import Model exposing (Model, CellState(..))
+import Model exposing (Model, Cell, CellState(..))
 import Board exposing (CellRect)
 
 draw : Model -> Html msg
@@ -41,18 +41,21 @@ drawOccupiedCells model =
     List.foldr (
         \cell rects -> 
             if (cell.state == Empty) then rects
-            else rects ++ [(drawOccupiedCell cell.coords model)]
+            else rects ++ [(drawOccupiedCell cell model)]
         )
         []
         model.board
 
-drawOccupiedCell : (Int, Int) -> Model -> Form
-drawOccupiedCell coords model =
+drawOccupiedCell : Cell -> Model -> Form
+drawOccupiedCell cell model =
         let 
-            cellRect = Board.getCellRectAt coords model
+            cellRect = Board.getCellRectAt cell.coords model
             baseLineStyle  = solid Color.black
-        in 
-            drawShapeInCellRect cellRect (circle (cellRect.size/3)) (outlined { baseLineStyle | width = 8 }) model
+        in  
+            if cell.state == O_ then
+                drawShapeInCellRect cellRect (circle (cellRect.size/3)) (outlined { baseLineStyle | width = 8 }) model
+            else
+                drawShapeInCellRect cellRect (square (cellRect.size/2)) (outlined { baseLineStyle | width = 8 }) model
 
 
 drawHighlightedCell : Model -> List Form
