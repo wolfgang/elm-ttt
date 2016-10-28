@@ -52,27 +52,32 @@ drawOccupiedCell cell model =
             cellRect = Board.getCellRectAt cell.coords model
             baseLineStyle  = solid Color.black
         in  
-            if cell.state == O_ then
-                drawShapeInCellRect cellRect (circle (cellRect.size/3)) (outlined { baseLineStyle | width = 8 }) model
-            else
-                group [
-                    drawFormInCellRect 
-                        cellRect 
-                        (rect 8 cellRect.size
-                            |> filled Color.black
-                            |> rotate (degrees 45)
-                        )
-                        model,
+            if cell.state == O_ then drawOInCell cellRect model
+            else drawXInCell cellRect model
 
-                    drawFormInCellRect 
-                        cellRect 
-                        (rect 8 cellRect.size
-                            |> filled Color.black
-                            |> rotate (degrees -45)
-                        )
-                        model
-                    ]
+drawOInCell : CellRect -> Model -> Form
+drawOInCell cellRect model =
+    let baseLineStyle  = solid Color.black
+    in 
+        drawFormInCellRect 
+            cellRect 
+            (circle (cellRect.size/3) |> outlined { baseLineStyle | width = 8 })
+            model   
 
+drawXInCell : CellRect -> Model -> Form
+drawXInCell cellRect model = 
+    let baseRect = rect 8 cellRect.size |> filled Color.black
+    in 
+        group [
+            drawFormInCellRect 
+                cellRect 
+                (rotate (degrees 45) baseRect)
+                model,
+            drawFormInCellRect 
+                cellRect 
+                (rotate (degrees -45) baseRect)
+                model
+            ]
 
 drawHighlightedCell : Model -> List Form
 drawHighlightedCell model = 
@@ -90,12 +95,10 @@ drawCellAt (row, col) color model =
     let 
         cellRect = Board.getCellRectAt (row, col) model
     in 
-        drawShapeInCellRect cellRect (rect cellRect.size cellRect.size) (filled color) model
-
-
-drawShapeInCellRect : CellRect -> Shape -> (Shape -> Form) -> Model -> Form
-drawShapeInCellRect cellRect shape styleFn model = 
-    drawFormInCellRect cellRect (styleFn shape) model
+        drawFormInCellRect 
+            cellRect 
+            (filled color (rect cellRect.size cellRect.size)) 
+            model
 
 drawFormInCellRect : CellRect -> Form -> Model -> Form
 drawFormInCellRect cellRect form model = 
