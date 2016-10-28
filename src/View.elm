@@ -55,7 +55,23 @@ drawOccupiedCell cell model =
             if cell.state == O_ then
                 drawShapeInCellRect cellRect (circle (cellRect.size/3)) (outlined { baseLineStyle | width = 8 }) model
             else
-                drawShapeInCellRect cellRect (square (cellRect.size/2)) (outlined { baseLineStyle | width = 8 }) model
+                group [
+                    drawFormInCellRect 
+                        cellRect 
+                        (rect 8 cellRect.size
+                            |> filled Color.black
+                            |> rotate (degrees 45)
+                        )
+                        model,
+
+                    drawFormInCellRect 
+                        cellRect 
+                        (rect 8 cellRect.size
+                            |> filled Color.black
+                            |> rotate (degrees -45)
+                        )
+                        model
+                    ]
 
 
 drawHighlightedCell : Model -> List Form
@@ -79,9 +95,12 @@ drawCellAt (row, col) color model =
 
 drawShapeInCellRect : CellRect -> Shape -> (Shape -> Form) -> Model -> Form
 drawShapeInCellRect cellRect shape styleFn model = 
-        shape
-            |> styleFn
-            |> move (toCollageCoords cellRect model)
+    drawFormInCellRect cellRect (styleFn shape) model
+
+drawFormInCellRect : CellRect -> Form -> Model -> Form
+drawFormInCellRect cellRect form model = 
+    form |> move (toCollageCoords cellRect model)
+
 
 
 toCollageCoords : CellRect -> Model -> (Float, Float)
