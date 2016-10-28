@@ -48,5 +48,12 @@ initializeBoard =
         Board.cellCoords
 
 subscriptions : Model -> Sub Msg
-subscriptions model = Mouse.moves (\position -> MouseMoved position)
+subscriptions =
+    (\_ -> Sub.batch 
+        [ 
+            Mouse.moves MouseMoved
+        ]
+    )
+
+
 
