@@ -1,21 +1,22 @@
 module CellUI exposing (setHighlightedCell, setCellState)
-import Model exposing (Model, Cell, CellState)
+import Model exposing (Model, Cell, CellState(Empty))
 import Board exposing (CellRect)
 
 setHighlightedCell : Model -> Model
 setHighlightedCell model =
-    List.foldr setHighlightedCellAt model Board.cellCoords
+    List.foldr setHighlightedCellAt model model.board
 
 setCellState : CellState -> (Int,Int) -> Model -> Model
 setCellState state coords model =
     { model | board = List.map (\cell -> setStateOfCell cell coords state) model.board}
 
-setHighlightedCellAt : (Int, Int) -> Model -> Model
-setHighlightedCellAt cellCoords model =
+setHighlightedCellAt : Cell -> Model -> Model
+setHighlightedCellAt cell model =
     let 
+        cellCoords = cell.coords
         cellRect = Board.getCellRectAt cellCoords model
     in
-        if cellContainsPoint cellRect model.mousePosition then
+        if cellContainsPoint cellRect model.mousePosition && cell.state == Empty then
             { model | highlightedCell = Just cellCoords }
         else
             model
