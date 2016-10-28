@@ -22,4 +22,7 @@ update msg model =
     MouseClicked position -> 
         case model.highlightedCell of
             Nothing -> (model, Cmd.none)
-            Just coords -> (CellUI.setCellState X_ coords model, Cmd.none)
+            Just coords -> 
+                let newModel = CellUI.setCellState X_ coords model
+                in 
+                    ({ newModel | highlightedCell = Nothing }, Cmd.none)
