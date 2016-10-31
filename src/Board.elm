@@ -1,4 +1,4 @@
-module Board exposing (CellRect, cellCoords, getCellRectAt, setCellState, getEmptyCells)
+module Board exposing (CellRect, cellCoords, getCellRectAt, setCellState, getEmptyCells, getInitialCells)
 import Model exposing (Model, Cell, CellState(Empty))
 
 type alias CellRect = {
@@ -36,6 +36,11 @@ getEmptyCells : Model -> List (Int, Int)
 getEmptyCells model =
     List.filter (\cell -> cell.state == Empty) model.board
     |> List.map (\cell -> cell.coords) 
+
+getInitialCells : List Cell
+getInitialCells = 
+    List.map (\coords -> { coords = coords, state = Empty }) cellCoords
+
 
 setStateOfCell : Cell -> (Int, Int) -> CellState -> Cell
 setStateOfCell cell wantedCoords wantedState =

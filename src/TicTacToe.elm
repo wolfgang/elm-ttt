@@ -30,15 +30,11 @@ init =
         },
         mousePosition = (0, 0),
         highlightedCell = Nothing,
-        board = initializeBoard
+        board = Board.getInitialCells
 
     },
     Cmd.none
   )
-
-initializeBoard : List Cell
-initializeBoard = 
-    List.map (\coords -> { coords = coords, state = Empty }) Board.cellCoords
 
 subscriptions : Model -> Sub Msg
 subscriptions =

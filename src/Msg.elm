@@ -6,3 +6,4 @@ type Msg
   | MouseMoved Mouse.Position
   | MouseClicked Mouse.Position
   | RandomMove (Int, Int)
+  | ClearBoard

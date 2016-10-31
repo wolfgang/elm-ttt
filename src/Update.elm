@@ -1,9 +1,10 @@
 module Update exposing (update)
 import Msg exposing (Msg(..))
-import Model exposing (Model, CellState(..))
+import Model exposing (Model, Cell, CellState(..))
 import Board
 import CellUI
 import AI
+import Task
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model = 
@@ -24,14 +25,23 @@ update msg model =
             Nothing -> (model, Cmd.none)
             Just coords -> 
                 let newModel = modelWithNewCellState X_ coords model
-                in (newModel, AI.makeRandomMoveCmd newModel)
+                in (newModel, nextCmd newModel (AI.makeRandomMoveCmd newModel))
 
     RandomMove coords -> (modelWithNewCellState O_ coords model, Cmd.none)
 
+    ClearBoard -> ( { model | board = Board.getInitialCells }, Cmd.none)
 
 modelWithNewCellState : CellState -> (Int, Int) -> Model -> Model
 modelWithNewCellState state coords model = 
     let newModel = Board.setCellState state coords model
     in 
         { newModel | highlightedCell = Nothing }
+
+nextCmd : Model -> Cmd Msg -> Cmd Msg
+nextCmd model wantedCmd = 
+    if List.length (Board.getEmptyCells model) == 0 then
+        Task.perform (always ClearBoard) (always ClearBoard) (Task.succeed ())
+    else
+        wantedCmd
+
 
