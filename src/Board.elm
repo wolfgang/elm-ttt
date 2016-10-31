@@ -1,5 +1,5 @@
-module Board exposing (CellRect, cellCoords, getCellRectAt, setCellState)
-import Model exposing (Model, Cell, CellState)
+module Board exposing (CellRect, cellCoords, getCellRectAt, setCellState, getEmptyCells)
+import Model exposing (Model, Cell, CellState(Empty))
 
 type alias CellRect = {
     position : (Float, Float),
@@ -31,10 +31,16 @@ setCellState : CellState -> (Int,Int) -> Model -> Model
 setCellState state coords model =
     { model | board = List.map (\cell -> setStateOfCell cell coords state) model.board}
 
+
+getEmptyCells model =
+    List.filter (\cell -> cell.state == Empty) model.board
+    |> List.map (\cell -> cell.coords) 
+
 setStateOfCell : Cell -> (Int, Int) -> CellState -> Cell
 setStateOfCell cell wantedCoords wantedState =
     if cell.coords == wantedCoords then
         { cell | state = wantedState }
     else
         cell
+
 
