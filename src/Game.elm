@@ -37,15 +37,15 @@ getGameState model =
 
 hasLineWith : CellState -> Model -> Bool
 hasLineWith cellState model = 
-    Board.getCellStates (0, 0) (1, 0) (2, 0) model == [cellState, cellState, cellState] ||
-    Board.getCellStates (0, 1) (1, 1) (2, 1) model == [cellState, cellState, cellState] ||
-    Board.getCellStates (0, 2) (1, 2) (2, 2) model == [cellState, cellState, cellState] ||
-    Board.getCellStates (0, 0) (0, 1) (0, 2) model == [cellState, cellState, cellState] ||
-    Board.getCellStates (1, 0) (1, 1) (1, 2) model == [cellState, cellState, cellState] ||
-    Board.getCellStates (2, 0) (2, 1) (2, 2) model == [cellState, cellState, cellState] ||
-    Board.getCellStates (0, 0) (1, 1) (2, 2) model == [cellState, cellState, cellState]
-
-
+    let wantedStates = List.repeat 3 cellState
+    in
+        Board.getCellStates (0, 0) (1, 0) (2, 0) model == wantedStates ||
+        Board.getCellStates (0, 1) (1, 1) (2, 1) model == wantedStates ||
+        Board.getCellStates (0, 2) (1, 2) (2, 2) model == wantedStates ||
+        Board.getCellStates (0, 0) (0, 1) (0, 2) model == wantedStates ||
+        Board.getCellStates (1, 0) (1, 1) (1, 2) model == wantedStates ||
+        Board.getCellStates (2, 0) (2, 1) (2, 2) model == wantedStates ||
+        Board.getCellStates (0, 0) (1, 1) (2, 2) model == wantedStates
 
 modelWithEmptyBoard : Model -> Model
 modelWithEmptyBoard model = { model | board = Board.getInitialCells }
