@@ -3,11 +3,11 @@ import Model exposing (Model, Cell, CellState(..))
 import Board
 import Msg exposing (Msg)
 
-type GameState =
-    WIN_O
-    |WIN_X
-    |DRAW
-    |IN_PROGRESS
+type GameState
+    = WIN_O
+    | WIN_X
+    | DRAW
+    | IN_PROGRESS
 
 makeMove :  CellState -> (Int, Int) -> Model -> (Model -> Cmd Msg) -> (Model, Cmd Msg)
 makeMove cellState coords model nextCmdFn =
@@ -30,7 +30,7 @@ getGameState model =
         WIN_O
     else if hasLineWith X_ model then
         WIN_X
-    else if List.length (Board.getEmptyCells model) == 0 then
+    else if hasNoEmptyCellsLeft model then
         DRAW
     else 
         IN_PROGRESS
@@ -39,13 +39,29 @@ hasLineWith : CellState -> Model -> Bool
 hasLineWith cellState model = 
     let wantedStates = List.repeat 3 cellState
     in
-        Board.getCellStates (0, 0) (1, 0) (2, 0) model == wantedStates ||
-        Board.getCellStates (0, 1) (1, 1) (2, 1) model == wantedStates ||
-        Board.getCellStates (0, 2) (1, 2) (2, 2) model == wantedStates ||
-        Board.getCellStates (0, 0) (0, 1) (0, 2) model == wantedStates ||
-        Board.getCellStates (1, 0) (1, 1) (1, 2) model == wantedStates ||
-        Board.getCellStates (2, 0) (2, 1) (2, 2) model == wantedStates ||
-        Board.getCellStates (0, 0) (1, 1) (2, 2) model == wantedStates
+        hasRowWith wantedStates 0 model ||
+        hasRowWith wantedStates 1 model ||
+        hasRowWith wantedStates 2 model ||
+        hasColumnWith wantedStates 0 model ||
+        hasColumnWith wantedStates 1 model ||
+        hasColumnWith wantedStates 2 model ||
+        hasDiagonalWith wantedStates model
+
+hasRowWith : List CellState -> Int -> Model -> Bool
+hasRowWith cellStates rowIndex model = 
+    Board.getCellStates (0, rowIndex) (1, rowIndex) (2, rowIndex) model ==  cellStates
+
+hasColumnWith : List CellState -> Int -> Model -> Bool
+hasColumnWith cellStates columIndex model = 
+    Board.getCellStates (columIndex, 0) (columIndex, 1) (columIndex, 2) model ==  cellStates
+
+hasDiagonalWith : List CellState -> Model -> Bool
+hasDiagonalWith cellStates model =
+    Board.getCellStates (0, 0) (1, 1) (2, 2) model == cellStates
+
+hasNoEmptyCellsLeft : Model -> Bool
+hasNoEmptyCellsLeft model =
+    List.length (Board.getEmptyCells model) == 0
 
 modelWithEmptyBoard : Model -> Model
 modelWithEmptyBoard model = { model | board = Board.getInitialCells }
