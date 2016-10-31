@@ -1,4 +1,11 @@
-module Board exposing (CellRect, cellCoords, getCellRectAt, setCellState, getEmptyCells, getInitialCells, getCellStates)
+module Board exposing (
+    CellRect, 
+    cellCoords, 
+    setCellState, 
+    getEmptyCells, 
+    getInitialCells, 
+    getCellStates
+    )
 import Model exposing (Model, Cell, CellState(Empty))
 
 type alias CellRect = {
@@ -13,19 +20,6 @@ cellCoords =
         (0, 1), (1, 1), (2, 1), 
         (0, 2), (1, 2), (2, 2)
     ]
-
-getCellRectAt : (Int, Int) -> Model -> CellRect
-getCellRectAt (row, col) model =
-    let 
-        gs = model.gridSettings
-        cellSize = (gs.size - gs.gridLineThickness)/3
-        cellX = (cellSize + gs.gridLineThickness/2)*(toFloat row)
-        cellY = (cellSize + gs.gridLineThickness/2)*(toFloat col)
-    in 
-        { 
-            position = (cellX, cellY), 
-            size = cellSize 
-        }
 
 setCellState : CellState -> (Int,Int) -> Model -> Model
 setCellState state coords model =
