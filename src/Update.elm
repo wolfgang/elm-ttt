@@ -25,10 +25,11 @@ update msg model =
             Just coords -> 
                 let newModel = modelWithNewCellState X_ coords model
                 in (newModel, AI.makeRandomMoveCmd newModel)
-                
+
     RandomMove coords -> (modelWithNewCellState O_ coords model, Cmd.none)
 
 
+modelWithNewCellState : CellState -> (Int, Int) -> Model -> Model
 modelWithNewCellState state coords model = 
     let newModel = Board.setCellState state coords model
     in 

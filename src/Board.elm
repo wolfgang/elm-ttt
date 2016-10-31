@@ -32,6 +32,7 @@ setCellState state coords model =
     { model | board = List.map (\cell -> setStateOfCell cell coords state) model.board}
 
 
+getEmptyCells : Model -> List (Int, Int)
 getEmptyCells model =
     List.filter (\cell -> cell.state == Empty) model.board
     |> List.map (\cell -> cell.coords) 
