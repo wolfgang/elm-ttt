@@ -24,20 +24,20 @@ update msg model =
         case model.highlightedCell of
             Nothing -> (model, Cmd.none)
             Just coords -> 
-                let newModel = modelWithNewCellState X_ coords model
-                in 
-                    if isGameOver newModel then
-                        (modelWithEmptyBoard newModel, Cmd.none)
-                    else
-                        (newModel, AI.makeRandomMoveCmd newModel)
+                makeMove X_ coords model AI.makeRandomMoveCmd
 
     RandomMove coords -> 
-        let newModel = modelWithNewCellState O_ coords model
-        in 
-            if isGameOver newModel then
-                (modelWithEmptyBoard newModel, Cmd.none)
-            else
-                (newModel, Cmd.none)
+        makeMove O_ coords model (\model -> Cmd.none)
+
+makeMove :  CellState -> (Int, Int) -> Model -> (Model -> Cmd Msg) -> (Model, Cmd Msg)
+makeMove cellState coords model nextCmdFn =
+    let newModel = modelWithNewCellState cellState coords model
+    in 
+        if isGameOver newModel then
+            (modelWithEmptyBoard newModel, Cmd.none)
+        else
+            (newModel, nextCmdFn newModel)
+
 
 modelWithNewCellState : CellState -> (Int, Int) -> Model -> Model
 modelWithNewCellState state coords model = 
