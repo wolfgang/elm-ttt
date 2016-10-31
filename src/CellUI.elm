@@ -1,6 +1,10 @@
-module CellUI exposing (setHighlightedCell, getCellRectAt)
+module CellUI exposing (CellRect, setHighlightedCell, getCellRectAt)
 import Model exposing (Model, Cell, CellState(Empty))
-import Board exposing (CellRect)
+
+type alias CellRect = {
+    position : (Float, Float),
+    size: Float
+}
 
 setHighlightedCell : Model -> Model
 setHighlightedCell model =

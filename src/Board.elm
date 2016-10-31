@@ -1,5 +1,4 @@
 module Board exposing (
-    CellRect, 
     cellCoords, 
     setCellState, 
     getEmptyCells, 
@@ -8,10 +7,6 @@ module Board exposing (
     )
 import Model exposing (Model, Cell, CellState(Empty))
 
-type alias CellRect = {
-    position : (Float, Float),
-    size: Float
-}
 
 cellCoords : List (Int, Int)
 cellCoords = 

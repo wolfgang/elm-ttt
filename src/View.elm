@@ -8,8 +8,7 @@ import Collage exposing (..)
 import Color exposing (Color, rgb)
 import Element exposing (toHtml)
 import Model exposing (Model, Cell, CellState(..))
-import Board exposing (CellRect)
-import CellUI
+import CellUI exposing (CellRect)
 
 draw : Model -> Html msg
 draw model = 
