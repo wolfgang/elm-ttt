@@ -3,7 +3,10 @@ import Msg exposing (Msg(..))
 import Model exposing (Model, CellState(X_))
 import Board
 import CellUI
+import Random
 
+
+makeRandomMoveCmd model = Random.generate RandomMove (Random.int 0 10)
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model = 
@@ -25,4 +28,6 @@ update msg model =
             Just coords -> 
                 let newModel = Board.setCellState X_ coords model
                 in 
-                    ({ newModel | highlightedCell = Nothing }, Cmd.none)
+                    ({ newModel | highlightedCell = Nothing }, (makeRandomMoveCmd model))
+
+    RandomMove index -> ({ model | debugIndex = index}, Cmd.none)

@@ -88,7 +88,10 @@ drawHighlightedCell model =
             in [drawCellAt coords gs.cellHighlightColor model]
 
 drawDebugText model = 
-    [ debugPrintAt (0, 0) (toString model.mousePosition)]
+    [ 
+        debugPrintAt (0, -50) (toString model.mousePosition),
+        debugPrintAt (0, -62) (toString model.debugIndex)
+    ]
 
 drawCellAt : (Int, Int) -> Color -> Model -> Form
 drawCellAt (row, col) color model = 
@@ -118,7 +121,7 @@ debugPrintAt pos string =
     textWidth = (toFloat (String.length string)*4)
   in
     Text.fromString string
-    |> Text.color Color.black
+    |> Text.color Color.red
     |> Text.monospace
     |> Text.height 12
     |> Element.leftAligned

@@ -12,7 +12,8 @@ type alias Model = {
     },
     mousePosition: (Float, Float),
     highlightedCell: Maybe (Int, Int),
-    board: List Cell
+    board: List Cell,
+    debugIndex: Int
 }
 
 type alias Cell = {

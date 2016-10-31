@@ -30,7 +30,8 @@ init =
         },
         mousePosition = (0, 0),
         highlightedCell = Nothing,
-        board = initializeBoard
+        board = initializeBoard,
+        debugIndex = -1
 
     },
     Cmd.none
