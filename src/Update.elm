@@ -2,7 +2,7 @@ module Update exposing (update)
 import Msg exposing (Msg(..))
 import Model exposing (Model, Cell, CellState(..))
 import Board
-import CellUI
+import BoardUI
 import AI
 import Game
 
@@ -18,7 +18,7 @@ update msg model =
                     highlightedCell = Nothing
                 }
         in
-            (CellUI.setHighlightedCell newModel, Cmd.none)
+            (BoardUI.setHighlightedCell newModel, Cmd.none)
 
     MouseClicked position -> 
         case model.highlightedCell of

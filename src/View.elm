@@ -8,7 +8,7 @@ import Collage exposing (..)
 import Color exposing (Color, rgb)
 import Element exposing (toHtml)
 import Model exposing (Model, Cell, CellState(..))
-import CellUI exposing (CellRect)
+import BoardUI exposing (CellRect)
 
 draw : Model -> Html msg
 draw model = 
@@ -49,7 +49,7 @@ drawOccupiedCells model =
 drawOccupiedCell : Cell -> Model -> Form
 drawOccupiedCell cell model =
         let 
-            cellRect = CellUI.getCellRectAt cell.coords model
+            cellRect = BoardUI.getCellRectAt cell.coords model
             baseLineStyle  = solid Color.black
         in  
             if cell.state == O_ then drawOInCell cellRect model
@@ -95,7 +95,7 @@ drawDebugText model =
 drawCellAt : (Int, Int) -> Color -> Model -> Form
 drawCellAt (row, col) color model = 
     let 
-        cellRect = CellUI.getCellRectAt (row, col) model
+        cellRect = BoardUI.getCellRectAt (row, col) model
     in 
         drawFormInCellRect 
             cellRect 

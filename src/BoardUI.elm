@@ -1,4 +1,4 @@
-module CellUI exposing (CellRect, setHighlightedCell, getCellRectAt)
+module BoardUI exposing (CellRect, setHighlightedCell, getCellRectAt)
 import Model exposing (Model, Cell, CellState(Empty))
 
 type alias CellRect = {
