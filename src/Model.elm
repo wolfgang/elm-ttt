@@ -13,7 +13,7 @@ type alias Model = {
     mousePosition: (Float, Float),
     highlightedCell: Maybe (Int, Int),
     board: List Cell,
-    debugIndex: Int
+    debugCoords: (Int, Int)
 }
 
 type alias Cell = {

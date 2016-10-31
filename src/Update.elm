@@ -1,12 +1,30 @@
 module Update exposing (update)
 import Msg exposing (Msg(..))
-import Model exposing (Model, CellState(X_))
+import Model exposing (Model, CellState(..))
 import Board
 import CellUI
 import Random
 
 
-makeRandomMoveCmd model = Random.generate RandomMove (Random.int 0 10)
+getFreeCells model =
+    List.filter (\cell -> cell.state == Empty) model.board
+    |> List.map (\cell -> cell.coords) 
+    
+getNth n list = 
+    List.drop n list |> safeHead
+
+safeHead list =
+    case List.head list of
+        Nothing -> (-1, -1)
+        Just x -> x
+
+
+makeRandomMoveCmd model = 
+    let
+        freeCells = getFreeCells model
+    in 
+        Random.generate RandomMove 
+            (Random.map (\index -> getNth index freeCells) (Random.int 0 (List.length freeCells - 1)))
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model = 
@@ -28,6 +46,8 @@ update msg model =
             Just coords -> 
                 let newModel = Board.setCellState X_ coords model
                 in 
-                    ({ newModel | highlightedCell = Nothing }, (makeRandomMoveCmd model))
+                    ({ newModel | highlightedCell = Nothing }, (makeRandomMoveCmd newModel))
 
-    RandomMove index -> ({ model | debugIndex = index}, Cmd.none)
+    RandomMove coords -> 
+        let newModel = Board.setCellState O_ coords model
+        in ({ newModel | highlightedCell = Nothing }, Cmd.none)

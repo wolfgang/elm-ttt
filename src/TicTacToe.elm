@@ -31,7 +31,7 @@ init =
         mousePosition = (0, 0),
         highlightedCell = Nothing,
         board = initializeBoard,
-        debugIndex = -1
+        debugCoords = (-1, -1)
 
     },
     Cmd.none
@@ -41,11 +41,12 @@ initializeBoard : List Cell
 initializeBoard = 
     List.map 
         (\coords -> 
-            if coords == (1, 0) then { coords = coords, state = O_ }
-            else if coords == (0, 2) then { coords = coords, state = O_ }
-            else if coords == (2, 2) then { coords = coords, state = X_ }
-            else if coords == (1, 1) then { coords = coords, state = X_ }
-            else { coords = coords, state = Empty })
+            --if coords == (1, 0) then { coords = coords, state = O_ }
+            --else if coords == (0, 2) then { coords = coords, state = O_ }
+            --else if coords == (2, 2) then { coords = coords, state = X_ }
+            --else if coords == (1, 1) then { coords = coords, state = X_ }
+            --else 
+            { coords = coords, state = Empty })
         Board.cellCoords
 
 subscriptions : Model -> Sub Msg

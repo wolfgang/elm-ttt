@@ -90,7 +90,7 @@ drawHighlightedCell model =
 drawDebugText model = 
     [ 
         debugPrintAt (0, -50) (toString model.mousePosition),
-        debugPrintAt (0, -62) (toString model.debugIndex)
+        debugPrintAt (0, -62) (toString model.debugCoords)
     ]
 
 drawCellAt : (Int, Int) -> Color -> Model -> Form
