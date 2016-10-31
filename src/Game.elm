@@ -45,7 +45,8 @@ hasLineWith cellState model =
         hasColumnWith wantedStates 0 model ||
         hasColumnWith wantedStates 1 model ||
         hasColumnWith wantedStates 2 model ||
-        hasDiagonalWith wantedStates model
+        hasLeftDiagonalWith wantedStates model ||
+        hasRightDiagonalWith wantedStates model
 
 hasRowWith : List CellState -> Int -> Model -> Bool
 hasRowWith cellStates rowIndex model = 
@@ -55,9 +56,13 @@ hasColumnWith : List CellState -> Int -> Model -> Bool
 hasColumnWith cellStates columIndex model = 
     Board.getCellStates (columIndex, 0) (columIndex, 1) (columIndex, 2) model ==  cellStates
 
-hasDiagonalWith : List CellState -> Model -> Bool
-hasDiagonalWith cellStates model =
+hasLeftDiagonalWith : List CellState -> Model -> Bool
+hasLeftDiagonalWith cellStates model =
     Board.getCellStates (0, 0) (1, 1) (2, 2) model == cellStates
+
+hasRightDiagonalWith : List CellState -> Model -> Bool
+hasRightDiagonalWith cellStates model =
+    Board.getCellStates (2, 0) (1, 1) (0, 2) model == cellStates
 
 hasNoEmptyCellsLeft : Model -> Bool
 hasNoEmptyCellsLeft model =
