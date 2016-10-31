@@ -25,11 +25,19 @@ update msg model =
             Nothing -> (model, Cmd.none)
             Just coords -> 
                 let newModel = modelWithNewCellState X_ coords model
-                in (newModel, nextCmd newModel (AI.makeRandomMoveCmd newModel))
+                in 
+                    if isGameOver newModel then
+                        (modelWithEmptyBoard newModel, Cmd.none)
+                    else
+                        (newModel, AI.makeRandomMoveCmd newModel)
 
-    RandomMove coords -> (modelWithNewCellState O_ coords model, Cmd.none)
-
-    ClearBoard -> ( { model | board = Board.getInitialCells }, Cmd.none)
+    RandomMove coords -> 
+        let newModel = modelWithNewCellState O_ coords model
+        in 
+            if isGameOver newModel then
+                (modelWithEmptyBoard newModel, Cmd.none)
+            else
+                (newModel, Cmd.none)
 
 modelWithNewCellState : CellState -> (Int, Int) -> Model -> Model
 modelWithNewCellState state coords model = 
@@ -37,11 +45,9 @@ modelWithNewCellState state coords model =
     in 
         { newModel | highlightedCell = Nothing }
 
-nextCmd : Model -> Cmd Msg -> Cmd Msg
-nextCmd model wantedCmd = 
-    if List.length (Board.getEmptyCells model) == 0 then
-        Task.perform (always ClearBoard) (always ClearBoard) (Task.succeed ())
-    else
-        wantedCmd
+isGameOver : Model -> Bool
+isGameOver model = List.length (Board.getEmptyCells model) == 0
 
+modelWithEmptyBoard : Model -> Model
+modelWithEmptyBoard model = { model | board = Board.getInitialCells }
 
