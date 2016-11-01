@@ -35,24 +35,33 @@ getWinningLine : CellState -> Model -> Maybe (CellState, List (Int, Int))
 getWinningLine cellState model =
     let wantedStates = List.repeat 3 cellState
     in
-        if getCellStatesForRow 0 model == wantedStates then
-            Just (cellState,  getRowCoords 0)
-        else if getCellStatesForRow 1 model == wantedStates then
-            Just (cellState, getRowCoords 1)
-        else if getCellStatesForRow 2 model == wantedStates then
-            Just (cellState, getRowCoords 2)
-        else if getCellStatesForColumn 0 model == wantedStates then
-            Just (cellState, getColumCoords 0)
-        else if getCellStatesForColumn 1 model == wantedStates then
-            Just (cellState, getColumCoords 1)
-        else if getCellStatesForColumn 2 model == wantedStates then
-            Just (cellState, getColumCoords 2)
-        else if getLeftToRightDiagonal model == wantedStates then
-            Just (cellState, getLeftToRightDiagonalCoords)
-        else if getRightToLeftDiagonal model == wantedStates then
-            Just (cellState, getRightToLeftDiagonalCoords)
+        case getWinningRow cellState wantedStates model of
+            Just rowIndex -> Just (cellState, getRowCoords rowIndex)
+            Nothing ->
+                case getWinningColumn cellState wantedStates model of
+                    Just columIndex -> Just (cellState, getColumCoords columIndex)
+                    Nothing ->
+                        if getLeftToRightDiagonal model == wantedStates then
+                            Just (cellState, getLeftToRightDiagonalCoords)
+                        else if getRightToLeftDiagonal model == wantedStates then
+                            Just (cellState, getRightToLeftDiagonalCoords)
+                        else Nothing
+
+
+getWinningRow : CellState -> List CellState -> Model -> Maybe Int
+getWinningRow cellState wantedStates model =
+        if getCellStatesForRow 0 model == wantedStates then Just 0
+        else if getCellStatesForRow 1 model == wantedStates then Just 1
+        else if getCellStatesForRow 2 model == wantedStates then Just 2
         else Nothing
-            
+
+getWinningColumn : CellState -> List CellState -> Model -> Maybe Int
+getWinningColumn cellState wantedStates model =
+        if getCellStatesForColumn 0 model == wantedStates then Just 0
+        else if getCellStatesForColumn 1 model == wantedStates then Just 1
+        else if getCellStatesForColumn 2 model == wantedStates then Just 2
+        else Nothing
+
 
 getCellStatesForRow : Int -> Model -> List CellState
 getCellStatesForRow rowIndex model = 
