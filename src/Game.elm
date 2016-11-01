@@ -54,29 +54,13 @@ getWinningLine cellState model =
         else Nothing
             
 
-hasRowWith : List CellState -> Int -> Model -> Bool
-hasRowWith cellStates rowIndex model = 
-    (getCellStatesForRow rowIndex model) ==  cellStates
-
 getCellStatesForRow : Int -> Model -> List CellState
 getCellStatesForRow rowIndex model = 
     Board.getCellStates (getRowCoords rowIndex) model
 
-hasColumnWith : List CellState -> Int -> Model -> Bool
-hasColumnWith cellStates columIndex model = 
-    (getCellStatesForColumn columIndex model) ==  cellStates
-
 getCellStatesForColumn : Int -> Model -> List CellState
 getCellStatesForColumn columIndex model =
     Board.getCellStates (getColumCoords columIndex) model    
-
-hasLeftDiagonalWith : List CellState -> Model -> Bool
-hasLeftDiagonalWith cellStates model =
-    getLeftToRightDiagonal model == cellStates
-
-hasRightDiagonalWith : List CellState -> Model -> Bool
-hasRightDiagonalWith cellStates model =
-    getRightToLeftDiagonal model == cellStates
 
 getLeftToRightDiagonal : Model -> List CellState
 getLeftToRightDiagonal model = 
@@ -97,7 +81,6 @@ getLeftToRightDiagonalCoords = [(0, 0), (1, 1), (2, 2)]
 
 getRightToLeftDiagonalCoords : List (Int, Int)
 getRightToLeftDiagonalCoords = [(2, 0), (1, 1), (0, 2)]
-
 
 hasNoEmptyCellsLeft : Model -> Bool
 hasNoEmptyCellsLeft model =
