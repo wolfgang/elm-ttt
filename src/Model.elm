@@ -23,7 +23,6 @@ type alias Cell = {
 type CellState = O_ | X_ | Empty
 
 type GameState
-    = WIN_O
-    | WIN_X
+    = WIN
     | DRAW
     | IN_PROGRESS

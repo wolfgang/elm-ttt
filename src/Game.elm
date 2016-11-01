@@ -24,7 +24,7 @@ modelWithNewCellState state coords model =
 getGameState : CellState -> Model -> (GameState, List (Int, Int))
 getGameState cellState model =
     case getWinningLine cellState model of
-        Just (cellState, line) -> (if cellState==X_ then WIN_X else WIN_O, line)
+        Just (cellState, line) -> (WIN, line)
         _ ->
             if hasNoEmptyCellsLeft model then
                 (DRAW, [])
@@ -46,7 +46,6 @@ getWinningLine cellState model =
                         else if getRightToLeftDiagonal model == wantedStates then
                             Just (cellState, getRightToLeftDiagonalCoords)
                         else Nothing
-
 
 getWinningRow : CellState -> List CellState -> Model -> Maybe Int
 getWinningRow cellState wantedStates model =
