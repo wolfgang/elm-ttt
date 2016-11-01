@@ -94,19 +94,38 @@ drawWinningLine model =
         (_, []) -> []
         (_, cellCoords) ->
             let
+                startCoords = ListExt.nth 0 cellCoords (-1, -1)
+                endCoords = ListExt.nth 2 cellCoords (-1, -1)
+                startRect = BoardUI.getCellRectAt startCoords model
+                endRect = BoardUI.getCellRectAt endCoords model
+                (xOffset, yOffset) = getOffset (endRect.size/2) startCoords endCoords
+                line = segment 
+                        (toCollageCoordsWithOffset startRect.position (xOffset, yOffset) model) 
+                        (toCollageCoordsWithOffset 
+                            endRect.position 
+                            (endRect.size - xOffset, endRect.size - yOffset) 
+                            model) 
                 baseLineStyle  = solid (Color.rgba 255 0 0 0.9)
-                (row0, col0) = ListExt.nth 0 cellCoords (-1000, -1000)
-                (row2, col2) = ListExt.nth 2 cellCoords (-1000, -1000)
-                startRect = BoardUI.getCellRectAt (row0, col0) model
-                endRect = BoardUI.getCellRectAt (row2, col2) model
-                line = segment (toCollageCoords startRect model) (toCollageCoords endRect model)
             in
                 [ traced { baseLineStyle | width = 16 } line ]
+
+
+getOffset : Float -> (Int, Int) -> (Int, Int) -> (Float, Float)
+getOffset mult (row0, col0) (row2, col2) =
+    if row0 == row2 && col0 /= col2 then (mult, 0)
+    else if row0 /=row2 && col0 == col2 then (0, mult)
+    else if (row0, col0)==(0, 2) then (0, mult*2)
+    else (0, 0)
 
 drawDebugText model = 
     [ 
         debugPrintAt (0, -50) (toString model.mousePosition)
-    ]
+    ] 
+    ++         
+    (case model.highlightedCell of
+        Nothing -> []
+        Just coords -> [debugPrintAt(0, 69) (toString model.highlightedCell)])
+
 
 drawCellAt : (Int, Int) -> Color -> Model -> Form
 drawCellAt (row, col) color model = 
@@ -120,14 +139,18 @@ drawCellAt (row, col) color model =
 
 drawFormInCellRect : CellRect -> Form -> Model -> Form
 drawFormInCellRect cellRect form model = 
-    form |> move (toCollageCoords cellRect model)
+    form |> move (rectToCollage cellRect model)
 
-toCollageCoords : CellRect -> Model -> (Float, Float)
-toCollageCoords rect model = 
+rectToCollage : CellRect -> Model -> (Float, Float)
+rectToCollage rect model = 
+    toCollageCoordsWithOffset rect.position (rect.size/2, rect.size/2) model
+
+
+posToCollageCoords : (Float, Float) ->  Model -> (Float, Float)
+posToCollageCoords (x, y) model = 
     let 
         gridSize = model.gridSettings.size
-        (x, y) = rect.position
-    in (x - gridSize/2 + rect.size/2, -(y - gridSize/2 + rect.size/2))
+    in (x - gridSize/2, -(y - gridSize/2))
 
 toCollageCoordsWithOffset : (Float, Float) -> (Float, Float) -> Model -> (Float, Float)
 toCollageCoordsWithOffset (x, y) (offsetX, offsetY) model = 

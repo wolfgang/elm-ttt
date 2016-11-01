@@ -88,7 +88,7 @@ getLeftToRightDiagonalCoords : List (Int, Int)
 getLeftToRightDiagonalCoords = [(0, 0), (1, 1), (2, 2)]
 
 getRightToLeftDiagonalCoords : List (Int, Int)
-getRightToLeftDiagonalCoords = [(2, 0), (1, 1), (0, 2)]
+getRightToLeftDiagonalCoords = [(0, 2), (1, 1), (2, 0)]
 
 hasNoEmptyCellsLeft : Model -> Bool
 hasNoEmptyCellsLeft model =
