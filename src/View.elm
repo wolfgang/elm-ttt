@@ -20,6 +20,7 @@ draw model =
             (
                 drawBackground model
                 ++ drawBaseCells model
+                ++ drawWinningLine model
                 ++ drawOccupiedCells model
                 ++ drawHighlightedCell model
                 ++ drawDebugText model
@@ -86,6 +87,13 @@ drawHighlightedCell model =
         Just coords -> 
             let gs = model.gridSettings
             in [drawCellAt coords gs.cellHighlightColor model]
+
+drawWinningLine : Model -> List Form
+drawWinningLine model =
+    case model.gameState of
+        (_, []) -> []
+        (_, cellCoords) ->
+            List.map (\coord -> drawCellAt coord Color.red model) cellCoords
 
 drawDebugText model = 
     [ 
