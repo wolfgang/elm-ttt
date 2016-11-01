@@ -8,7 +8,7 @@ makeMove :  CellState -> (Int, Int) -> Model -> (Model -> Cmd Msg) -> (Model, Cm
 makeMove cellState coords model nextCmdFn =
     let 
         modelWithMove = modelWithNewCellState cellState coords model
-        newModel = { modelWithMove | gameState = getGameState modelWithMove }
+        newModel = { modelWithMove | gameState = getGameState cellState modelWithMove }
     in 
         if newModel.gameState /= (IN_PROGRESS, []) then
             (newModel, Cmd.none)
@@ -21,18 +21,15 @@ modelWithNewCellState state coords model =
     in 
         { newModel | highlightedCell = Nothing }
 
-getGameState : Model -> (GameState, List (Int, Int))
-getGameState model =
-    case (getWinningLine O_ model) of
-        Just (O_, line) -> (WIN_O, line)
+getGameState : CellState -> Model -> (GameState, List (Int, Int))
+getGameState cellState model =
+    case getWinningLine cellState model of
+        Just (cellState, line) -> (if cellState==X_ then WIN_X else WIN_O, line)
         _ ->
-            case getWinningLine X_ model of
-                Just (X_, line) -> (WIN_X, line)
-                _ ->
-                    if hasNoEmptyCellsLeft model then
-                        (DRAW, [])
-                    else
-                        (IN_PROGRESS, [])
+            if hasNoEmptyCellsLeft model then
+                (DRAW, [])
+            else
+                (IN_PROGRESS, [])
 
 getWinningLine : CellState -> Model -> Maybe (CellState, List (Int, Int))
 getWinningLine cellState model =
