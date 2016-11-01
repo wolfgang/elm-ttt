@@ -47,19 +47,36 @@ hasLineWith cellState model =
 
 hasRowWith : List CellState -> Int -> Model -> Bool
 hasRowWith cellStates rowIndex model = 
-    Board.getCellStates (0, rowIndex) (1, rowIndex) (2, rowIndex) model ==  cellStates
+    (getCellStatesForRow rowIndex model) ==  cellStates
+
+getCellStatesForRow : Int -> Model -> List CellState
+getCellStatesForRow rowIndex model = 
+    Board.getCellStates (0, rowIndex) (1, rowIndex) (2, rowIndex) model
 
 hasColumnWith : List CellState -> Int -> Model -> Bool
 hasColumnWith cellStates columIndex model = 
-    Board.getCellStates (columIndex, 0) (columIndex, 1) (columIndex, 2) model ==  cellStates
+    (getCellStatesForColumn columIndex model) ==  cellStates
+
+getCellStatesForColumn : Int -> Model -> List CellState
+getCellStatesForColumn columIndex model =
+    Board.getCellStates (columIndex, 0) (columIndex, 1) (columIndex, 2) model    
 
 hasLeftDiagonalWith : List CellState -> Model -> Bool
 hasLeftDiagonalWith cellStates model =
-    Board.getCellStates (0, 0) (1, 1) (2, 2) model == cellStates
+    getLeftToRightDiagonal model == cellStates
 
 hasRightDiagonalWith : List CellState -> Model -> Bool
 hasRightDiagonalWith cellStates model =
-    Board.getCellStates (2, 0) (1, 1) (0, 2) model == cellStates
+    getRightToLeftDiagonal model == cellStates
+
+getLeftToRightDiagonal : Model -> List CellState
+getLeftToRightDiagonal model = 
+    Board.getCellStates (0, 0) (1, 1) (2, 2) model
+
+getRightToLeftDiagonal : Model -> List CellState
+getRightToLeftDiagonal model = 
+    Board.getCellStates (2, 0) (1, 1) (0, 2) model
+
 
 hasNoEmptyCellsLeft : Model -> Bool
 hasNoEmptyCellsLeft model =
