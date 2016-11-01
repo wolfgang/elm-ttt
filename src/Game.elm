@@ -1,13 +1,8 @@
 module Game exposing (makeMove)
-import Model exposing (Model, Cell, CellState(..))
+import Model exposing (Model, Cell, GameState(..), CellState(..))
 import Board
 import Msg exposing (Msg)
 
-type GameState
-    = WIN_O
-    | WIN_X
-    | DRAW
-    | IN_PROGRESS
 
 makeMove :  CellState -> (Int, Int) -> Model -> (Model -> Cmd Msg) -> (Model, Cmd Msg)
 makeMove cellState coords model nextCmdFn =

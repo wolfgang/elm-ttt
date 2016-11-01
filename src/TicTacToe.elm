@@ -1,7 +1,7 @@
 import Html.App as App
 import Color exposing (rgb)
 import Mouse
-import Model exposing (Model, Cell, CellState(..))
+import Model exposing (..)
 import Update
 import View 
 import Board
@@ -30,7 +30,8 @@ init =
         },
         mousePosition = (0, 0),
         highlightedCell = Nothing,
-        board = Board.getInitialCells
+        board = Board.getInitialCells,
+        gameState = IN_PROGRESS
 
     },
     Cmd.none

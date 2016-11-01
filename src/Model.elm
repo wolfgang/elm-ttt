@@ -1,6 +1,5 @@
-module Model exposing (Model, Cell, CellState(..))
+module Model exposing (Model, Cell, GameState(..), CellState(..))
 import Color exposing (Color)
-
 
 type alias Model = {
     gridSettings: {
@@ -12,7 +11,8 @@ type alias Model = {
     },
     mousePosition: (Float, Float),
     highlightedCell: Maybe (Int, Int),
-    board: List Cell
+    board: List Cell,
+    gameState: GameState
 }
 
 type alias Cell = {
@@ -21,3 +21,9 @@ type alias Cell = {
 }
 
 type CellState = O_ | X_ | Empty
+
+type GameState
+    = WIN_O
+    | WIN_X
+    | DRAW
+    | IN_PROGRESS
