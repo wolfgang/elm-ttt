@@ -45,13 +45,22 @@ hasLineWith cellState model =
         hasLeftDiagonalWith wantedStates model ||
         hasRightDiagonalWith wantedStates model
 
+getWinningLine : CellState -> Model -> Maybe (CellState, List (Int, Int))
+getWinningLine cellState model =
+    let wantedStates = List.repeat 3 cellState
+    in
+        if getCellStatesForRow 0 model == wantedStates then
+            Just (cellState,  [(0, 0), (1, 0), (2, 0)])
+        else
+            Nothing
+
 hasRowWith : List CellState -> Int -> Model -> Bool
 hasRowWith cellStates rowIndex model = 
     (getCellStatesForRow rowIndex model) ==  cellStates
 
 getCellStatesForRow : Int -> Model -> List CellState
 getCellStatesForRow rowIndex model = 
-    Board.getCellStates (0, rowIndex) (1, rowIndex) (2, rowIndex) model
+    Board.getCellStates [(0, rowIndex), (1, rowIndex), (2, rowIndex)] model
 
 hasColumnWith : List CellState -> Int -> Model -> Bool
 hasColumnWith cellStates columIndex model = 
@@ -59,7 +68,7 @@ hasColumnWith cellStates columIndex model =
 
 getCellStatesForColumn : Int -> Model -> List CellState
 getCellStatesForColumn columIndex model =
-    Board.getCellStates (columIndex, 0) (columIndex, 1) (columIndex, 2) model    
+    Board.getCellStates [(columIndex, 0), (columIndex, 1), (columIndex, 2)] model    
 
 hasLeftDiagonalWith : List CellState -> Model -> Bool
 hasLeftDiagonalWith cellStates model =
@@ -71,11 +80,11 @@ hasRightDiagonalWith cellStates model =
 
 getLeftToRightDiagonal : Model -> List CellState
 getLeftToRightDiagonal model = 
-    Board.getCellStates (0, 0) (1, 1) (2, 2) model
+    Board.getCellStates [(0, 0), (1, 1), (2, 2)] model
 
 getRightToLeftDiagonal : Model -> List CellState
 getRightToLeftDiagonal model = 
-    Board.getCellStates (2, 0) (1, 1) (0, 2) model
+    Board.getCellStates [(2, 0), (1, 1), (0, 2)] model
 
 
 hasNoEmptyCellsLeft : Model -> Bool

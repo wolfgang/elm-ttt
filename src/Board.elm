@@ -31,17 +31,15 @@ getInitialCells =
     List.map (\coords -> { coords = coords, state = Empty }) cellCoords
 
 
-getCellStates : (Int, Int) -> (Int, Int) -> (Int, Int) -> Model -> List CellState
-getCellStates coords1 coords2 coords3 model =
-    let wantedCoords = [coords1, coords2, coords3]
-    in
-        List.foldr 
-            (\cell result -> 
-                if List.member cell.coords wantedCoords then 
-                    result ++ [cell.state] 
-                else result)
-            []
-            model.board
+getCellStates : List (Int, Int) -> Model -> List CellState
+getCellStates wantedCoords model =
+    List.foldr 
+        (\cell result -> 
+            if List.member cell.coords wantedCoords then 
+                result ++ [cell.state] 
+            else result)
+        []
+        model.board
 
 setStateOfCell : Cell -> (Int, Int) -> CellState -> Cell
 setStateOfCell cell wantedCoords wantedState =
