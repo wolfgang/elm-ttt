@@ -6,10 +6,12 @@ import Msg exposing (Msg)
 
 makeMove :  CellState -> (Int, Int) -> Model -> (Model -> Cmd Msg) -> (Model, Cmd Msg)
 makeMove cellState coords model nextCmdFn =
-    let newModel = modelWithNewCellState cellState coords model
+    let 
+        modelWithMove = modelWithNewCellState cellState coords model
+        newModel = { modelWithMove | gameState = getGameState modelWithMove }
     in 
-        if (getGameState newModel) /= IN_PROGRESS then
-            (modelWithEmptyBoard newModel, Cmd.none)
+        if newModel.gameState /= IN_PROGRESS then
+            (newModel, Cmd.none)
         else
             (newModel, nextCmdFn newModel)
 
