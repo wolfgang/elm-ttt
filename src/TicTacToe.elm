@@ -31,7 +31,7 @@ init =
         mousePosition = (0, 0),
         highlightedCell = Nothing,
         board = Board.getInitialCells,
-        gameState = IN_PROGRESS
+        gameState = (IN_PROGRESS, [])
 
     },
     Cmd.none
