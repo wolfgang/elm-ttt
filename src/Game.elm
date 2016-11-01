@@ -23,36 +23,39 @@ modelWithNewCellState state coords model =
 
 getGameState : Model -> GameState
 getGameState model =
-    if hasLineWith O_ model then
-        WIN_O
-    else if hasLineWith X_ model then
-        WIN_X
-    else if hasNoEmptyCellsLeft model then
-        DRAW
-    else 
-        IN_PROGRESS
-
-hasLineWith : CellState -> Model -> Bool
-hasLineWith cellState model = 
-    let wantedStates = List.repeat 3 cellState
-    in
-        hasRowWith wantedStates 0 model ||
-        hasRowWith wantedStates 1 model ||
-        hasRowWith wantedStates 2 model ||
-        hasColumnWith wantedStates 0 model ||
-        hasColumnWith wantedStates 1 model ||
-        hasColumnWith wantedStates 2 model ||
-        hasLeftDiagonalWith wantedStates model ||
-        hasRightDiagonalWith wantedStates model
+    case (getWinningLine O_ model) of
+        Just (O_, _) -> WIN_O
+        _ ->
+            case getWinningLine X_ model of
+                Just (X_, _) -> WIN_X
+                _ ->
+                    if hasNoEmptyCellsLeft model then
+                        DRAW
+                    else
+                        IN_PROGRESS
 
 getWinningLine : CellState -> Model -> Maybe (CellState, List (Int, Int))
 getWinningLine cellState model =
     let wantedStates = List.repeat 3 cellState
     in
         if getCellStatesForRow 0 model == wantedStates then
-            Just (cellState,  [(0, 0), (1, 0), (2, 0)])
-        else
-            Nothing
+            Just (cellState,  getRowCoords 0)
+        else if getCellStatesForRow 1 model == wantedStates then
+            Just (cellState, getRowCoords 1)
+        else if getCellStatesForRow 2 model == wantedStates then
+            Just (cellState, getRowCoords 2)
+        else if getCellStatesForColumn 0 model == wantedStates then
+            Just (cellState, getColumCoords 0)
+        else if getCellStatesForColumn 1 model == wantedStates then
+            Just (cellState, getColumCoords 1)
+        else if getCellStatesForColumn 2 model == wantedStates then
+            Just (cellState, getColumCoords 2)
+        else if getLeftToRightDiagonal model == wantedStates then
+            Just (cellState, getLeftToRightDiagonalCoords)
+        else if getRightToLeftDiagonal model == wantedStates then
+            Just (cellState, getRightToLeftDiagonalCoords)
+        else Nothing
+            
 
 hasRowWith : List CellState -> Int -> Model -> Bool
 hasRowWith cellStates rowIndex model = 
@@ -60,7 +63,7 @@ hasRowWith cellStates rowIndex model =
 
 getCellStatesForRow : Int -> Model -> List CellState
 getCellStatesForRow rowIndex model = 
-    Board.getCellStates [(0, rowIndex), (1, rowIndex), (2, rowIndex)] model
+    Board.getCellStates (getRowCoords rowIndex) model
 
 hasColumnWith : List CellState -> Int -> Model -> Bool
 hasColumnWith cellStates columIndex model = 
@@ -68,7 +71,7 @@ hasColumnWith cellStates columIndex model =
 
 getCellStatesForColumn : Int -> Model -> List CellState
 getCellStatesForColumn columIndex model =
-    Board.getCellStates [(columIndex, 0), (columIndex, 1), (columIndex, 2)] model    
+    Board.getCellStates (getColumCoords columIndex) model    
 
 hasLeftDiagonalWith : List CellState -> Model -> Bool
 hasLeftDiagonalWith cellStates model =
@@ -80,11 +83,23 @@ hasRightDiagonalWith cellStates model =
 
 getLeftToRightDiagonal : Model -> List CellState
 getLeftToRightDiagonal model = 
-    Board.getCellStates [(0, 0), (1, 1), (2, 2)] model
+    Board.getCellStates getLeftToRightDiagonalCoords model
 
 getRightToLeftDiagonal : Model -> List CellState
 getRightToLeftDiagonal model = 
-    Board.getCellStates [(2, 0), (1, 1), (0, 2)] model
+    Board.getCellStates getRightToLeftDiagonalCoords model
+
+getRowCoords : Int -> List (Int, Int)
+getRowCoords rowIndex = [(0, rowIndex), (1, rowIndex), (2, rowIndex)]
+
+getColumCoords : Int -> List (Int, Int)
+getColumCoords columIndex = [(columIndex, 0), (columIndex, 1), (columIndex, 2)]
+
+getLeftToRightDiagonalCoords : List (Int, Int)
+getLeftToRightDiagonalCoords = [(0, 0), (1, 1), (2, 2)]
+
+getRightToLeftDiagonalCoords : List (Int, Int)
+getRightToLeftDiagonalCoords = [(2, 0), (1, 1), (0, 2)]
 
 
 hasNoEmptyCellsLeft : Model -> Bool
