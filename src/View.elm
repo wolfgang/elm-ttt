@@ -3,12 +3,12 @@ module View exposing(draw)
 import Html exposing (Html)
 import String
 import Text
-
 import Collage exposing (..)
 import Color exposing (Color, rgb)
 import Element exposing (toHtml)
 import Model exposing (Model, Cell, CellState(..))
 import BoardUI exposing (CellRect)
+import ListExt
 
 draw : Model -> Html msg
 draw model = 
@@ -20,8 +20,8 @@ draw model =
             (
                 drawBackground model
                 ++ drawBaseCells model
-                ++ drawWinningLine model
                 ++ drawOccupiedCells model
+                ++ drawWinningLine model
                 ++ drawHighlightedCell model
                 ++ drawDebugText model
             )
@@ -93,7 +93,15 @@ drawWinningLine model =
     case model.gameState of
         (_, []) -> []
         (_, cellCoords) ->
-            List.map (\coord -> drawCellAt coord Color.red model) cellCoords
+            let
+                baseLineStyle  = solid (Color.rgba 255 0 0 0.9)
+                (row0, col0) = ListExt.nth 0 cellCoords (-1000, -1000)
+                (row2, col2) = ListExt.nth 2 cellCoords (-1000, -1000)
+                startRect = BoardUI.getCellRectAt (row0, col0) model
+                endRect = BoardUI.getCellRectAt (row2, col2) model
+                line = segment (toCollageCoords startRect model) (toCollageCoords endRect model)
+            in
+                [ traced { baseLineStyle | width = 16 } line ]
 
 drawDebugText model = 
     [ 
@@ -114,14 +122,18 @@ drawFormInCellRect : CellRect -> Form -> Model -> Form
 drawFormInCellRect cellRect form model = 
     form |> move (toCollageCoords cellRect model)
 
-
-
 toCollageCoords : CellRect -> Model -> (Float, Float)
 toCollageCoords rect model = 
     let 
         gridSize = model.gridSettings.size
         (x, y) = rect.position
     in (x - gridSize/2 + rect.size/2, -(y - gridSize/2 + rect.size/2))
+
+toCollageCoordsWithOffset : (Float, Float) -> (Float, Float) -> Model -> (Float, Float)
+toCollageCoordsWithOffset (x, y) (offsetX, offsetY) model = 
+    let 
+        gridSize = model.gridSettings.size
+    in (x - gridSize/2 + offsetX, -(y - gridSize/2 + offsetY))
 
 debugPrintAt pos string =
   let
