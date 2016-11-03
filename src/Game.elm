@@ -21,7 +21,6 @@ makeMove cellState coords model nextCmdFn =
         else
             (newModel, nextCmdFn newModel)
 
-
 createWinningAnimation : (GameState, List (Int, Int)) -> Model -> WinningAnimation
 createWinningAnimation gameState model =
     let
@@ -30,7 +29,7 @@ createWinningAnimation gameState model =
         endCoords = ListExt.nth 2 cellCoords (-1, -1)
         startRect = BoardUI.getCellRectAt startCoords model
         endRect = BoardUI.getCellRectAt endCoords model
-        (xOffset, yOffset) = getOffset (endRect.size/2) startCoords endCoords
+        (xOffset, yOffset) = getWinningLineOffset (endRect.size/2) startCoords endCoords
         (startX0, startY0) = startRect.position
         (endX0, endY0) = endRect.position
         (startX, startY) = (startX0 + xOffset, startY0 + yOffset)
@@ -39,8 +38,8 @@ createWinningAnimation gameState model =
         { startPoint = (startX, startY), endPoint = (endX, endY) }
 
 
-getOffset : Float -> (Int, Int) -> (Int, Int) -> (Float, Float)
-getOffset mult (row0, col0) (row2, col2) =
+getWinningLineOffset : Float -> (Int, Int) -> (Int, Int) -> (Float, Float)
+getWinningLineOffset mult (row0, col0) (row2, col2) =
     if row0 == row2 && col0 /= col2 then (mult, 0)
     else if row0 /=row2 && col0 == col2 then (0, mult)
     else if (row0, col0)==(0, 2) then (0, mult*2)

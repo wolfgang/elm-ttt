@@ -95,12 +95,11 @@ drawWinningLine model =
             let
                 winningAnimation = model.winningAnimation
                 line = segment 
-                        (posToCollageCoords winningAnimation.startPoint model)
-                        (posToCollageCoords winningAnimation.endPoint model)
-
-                baseLineStyle  = solid (Color.rgba 255 0 0 0.9)
+                        (toCollageCoords winningAnimation.startPoint model)
+                        (toCollageCoords winningAnimation.endPoint model)
+                baseLineStyle  = solid Color.black
             in
-                [ traced { baseLineStyle | width = 16 } line ]
+                [ traced { baseLineStyle | width = 24 } line ]
         _ -> []
 
 
@@ -141,11 +140,9 @@ rectToCollage rect model =
     toCollageCoordsWithOffset rect.position (rect.size/2, rect.size/2) model
 
 
-posToCollageCoords : (Float, Float) ->  Model -> (Float, Float)
-posToCollageCoords (x, y) model = 
-    let 
-        gridSize = model.gridSettings.size
-    in (x - gridSize/2, -(y - gridSize/2))
+toCollageCoords : (Float, Float) ->  Model -> (Float, Float)
+toCollageCoords (x, y) model = 
+    toCollageCoordsWithOffset (x, y) (0, 0) model
 
 toCollageCoordsWithOffset : (Float, Float) -> (Float, Float) -> Model -> (Float, Float)
 toCollageCoordsWithOffset (x, y) (offsetX, offsetY) model = 
