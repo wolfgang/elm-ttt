@@ -1,4 +1,4 @@
-module Model exposing (Model, Cell, GameState(..), CellState(..))
+module Model exposing (..)
 import Color exposing (Color)
 
 type alias Model = {
@@ -12,7 +12,8 @@ type alias Model = {
     mousePosition: (Float, Float),
     highlightedCell: Maybe (Int, Int),
     board: List Cell,
-    gameState: (GameState, List (Int, Int))
+    gameState: (GameState, List (Int, Int)),
+    winningAnimation: WinningAnimation
 }
 
 type alias Cell = {
@@ -26,3 +27,8 @@ type GameState
     = WIN
     | DRAW
     | IN_PROGRESS
+
+type alias WinningAnimation = { 
+        startPoint: (Float, Float), 
+        endPoint: (Float, Float)
+    }

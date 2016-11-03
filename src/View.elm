@@ -6,7 +6,7 @@ import Text
 import Collage exposing (..)
 import Color exposing (Color, rgb)
 import Element exposing (toHtml)
-import Model exposing (Model, Cell, CellState(..))
+import Model exposing (..)
 import BoardUI exposing (CellRect)
 import ListExt
 
@@ -91,23 +91,18 @@ drawHighlightedCell model =
 drawWinningLine : Model -> List Form
 drawWinningLine model =
     case model.gameState of
-        (_, []) -> []
-        (_, cellCoords) ->
+        (WIN, _) ->
             let
-                startCoords = ListExt.nth 0 cellCoords (-1, -1)
-                endCoords = ListExt.nth 2 cellCoords (-1, -1)
-                startRect = BoardUI.getCellRectAt startCoords model
-                endRect = BoardUI.getCellRectAt endCoords model
-                (xOffset, yOffset) = getOffset (endRect.size/2) startCoords endCoords
+                winningAnimation = model.winningAnimation
                 line = segment 
-                        (toCollageCoordsWithOffset startRect.position (xOffset, yOffset) model) 
-                        (toCollageCoordsWithOffset 
-                            endRect.position 
-                            (endRect.size - xOffset, endRect.size - yOffset) 
-                            model) 
+                        (posToCollageCoords winningAnimation.startPoint model)
+                        (posToCollageCoords winningAnimation.endPoint model)
+
                 baseLineStyle  = solid (Color.rgba 255 0 0 0.9)
             in
                 [ traced { baseLineStyle | width = 16 } line ]
+        _ -> []
+
 
 
 getOffset : Float -> (Int, Int) -> (Int, Int) -> (Float, Float)

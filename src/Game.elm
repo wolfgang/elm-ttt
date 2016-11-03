@@ -1,19 +1,50 @@
 module Game exposing (makeMove)
-import Model exposing (Model, Cell, GameState(..), CellState(..))
+import Model exposing (..)
 import Board
 import Msg exposing (Msg)
+import ListExt
+import BoardUI
 
 
 makeMove :  CellState -> (Int, Int) -> Model -> (Model -> Cmd Msg) -> (Model, Cmd Msg)
 makeMove cellState coords model nextCmdFn =
     let 
+        gameState = getGameState cellState modelWithMove
         modelWithMove = modelWithNewCellState cellState coords model
-        newModel = { modelWithMove | gameState = getGameState cellState modelWithMove }
+        newModel = { modelWithMove | 
+                        gameState = gameState, 
+                        winningAnimation = createWinningAnimation gameState model 
+                    }
     in 
         if newModel.gameState /= (IN_PROGRESS, []) then
             (newModel, Cmd.none)
         else
             (newModel, nextCmdFn newModel)
+
+
+createWinningAnimation : (GameState, List (Int, Int)) -> Model -> WinningAnimation
+createWinningAnimation gameState model =
+    let
+        (_, cellCoords) = gameState
+        startCoords = ListExt.nth 0 cellCoords (-1, -1)
+        endCoords = ListExt.nth 2 cellCoords (-1, -1)
+        startRect = BoardUI.getCellRectAt startCoords model
+        endRect = BoardUI.getCellRectAt endCoords model
+        (xOffset, yOffset) = getOffset (endRect.size/2) startCoords endCoords
+        (startX0, startY0) = startRect.position
+        (endX0, endY0) = endRect.position
+        (startX, startY) = (startX0 + xOffset, startY0 + yOffset)
+        (endX, endY) = (endX0 + (endRect.size - xOffset), endY0 + (endRect.size - yOffset))
+    in
+        { startPoint = (startX, startY), endPoint = (endX, endY) }
+
+
+getOffset : Float -> (Int, Int) -> (Int, Int) -> (Float, Float)
+getOffset mult (row0, col0) (row2, col2) =
+    if row0 == row2 && col0 /= col2 then (mult, 0)
+    else if row0 /=row2 && col0 == col2 then (0, mult)
+    else if (row0, col0)==(0, 2) then (0, mult*2)
+    else (0, 0)
 
 modelWithNewCellState : CellState -> (Int, Int) -> Model -> Model
 modelWithNewCellState state coords model = 
