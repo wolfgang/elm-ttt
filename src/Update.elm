@@ -49,16 +49,22 @@ update msg model =
 animateWinningLine : WinningAnimation -> Float -> WinningAnimation
 animateWinningLine winningAnimation deltaSeconds =
     let 
+        (startX, startY) = winningAnimation.startPoint
         (currentX, currentY) = winningAnimation.currentPoint
         (endX, endY) = winningAnimation.endPoint
         xDir = fsgn (endX - currentX)
         yDir = fsgn (endY - currentY)
         speed = 600
         delta = speed*deltaSeconds
+        totalDistance = distanceSquared winningAnimation.startPoint winningAnimation.endPoint
+        currentDistance = distanceSquared winningAnimation.currentPoint winningAnimation.startPoint
     in
-        { winningAnimation | 
-            currentPoint = (currentX + xDir*delta, currentY + yDir*delta)
-        }
+        if currentDistance >= totalDistance then
+            winningAnimation
+        else
+            { winningAnimation | 
+                currentPoint = (currentX + xDir*delta, currentY + yDir*delta)
+            }
 
 
 fsgn : Float -> Float 
@@ -67,6 +73,12 @@ fsgn x =
     else if x > 0 then 1
     else 0
 
+distanceSquared : (Float, Float) -> (Float, Float) -> Float
+distanceSquared (x0, y0) (x1, y1) =
+    let
+        diffX = x1 - x0
+        diffY = y1 - y0
+    in diffX*diffX + diffY*diffY
 
 
 

@@ -114,7 +114,7 @@ getOffset mult (row0, col0) (row2, col2) =
 drawDebugText model = 
     [ 
         debugPrintAt (0, -50) (toString model.mousePosition),
-        debugPrintAt (0, -60) (toString model.elapsedTime)
+        debugPrintAt (0, -60) (toString model.winningAnimation.currentPoint)
 
     ] 
     ++         
