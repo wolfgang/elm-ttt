@@ -111,16 +111,16 @@ getOffset mult (row0, col0) (row2, col2) =
     else if (row0, col0)==(0, 2) then (0, mult*2)
     else (0, 0)
 
-drawDebugText model = 
-    [ 
-        debugPrintAt (0, -50) (toString model.mousePosition),
-        debugPrintAt (0, -60) (toString model.winningAnimation.currentPoint)
+drawDebugText model =  []
+    --[ 
+    --    debugPrintAt (0, -50) (toString model.mousePosition),
+    --    debugPrintAt (0, -60) (toString model.winningAnimation.currentPoint)
 
-    ] 
-    ++         
-    (case model.highlightedCell of
-        Nothing -> []
-        Just coords -> [debugPrintAt(0, -70) (toString model.highlightedCell)])
+    --] 
+    --++         
+    --(case model.highlightedCell of
+    --    Nothing -> []
+    --    Just coords -> [debugPrintAt(0, -70) (toString model.highlightedCell)])
 
 
 drawCellAt : (Int, Int) -> Color -> Model -> Form
