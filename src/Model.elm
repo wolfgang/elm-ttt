@@ -13,7 +13,8 @@ type alias Model = {
     highlightedCell: Maybe (Int, Int),
     board: List Cell,
     gameState: (GameState, List (Int, Int)),
-    winningAnimation: WinningAnimation
+    winningAnimation: WinningAnimation,
+    elapsedTime: Float
 }
 
 type alias Cell = {

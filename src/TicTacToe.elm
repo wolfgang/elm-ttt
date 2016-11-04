@@ -5,6 +5,8 @@ import Model exposing (..)
 import Update
 import View 
 import Board
+import AnimationFrame
+import Time
 
 import Msg exposing (Msg(..))
 
@@ -32,7 +34,9 @@ init =
         highlightedCell = Nothing,
         board = Board.getInitialCells,
         gameState = (IN_PROGRESS, []),
-        winningAnimation = { startPoint = (0, 0), endPoint = (0, 0) }
+        winningAnimation = { startPoint = (0, 0), endPoint = (0, 0) },
+        elapsedTime = 0
+
 
     },
     Cmd.none
@@ -43,7 +47,8 @@ subscriptions =
     (\_ -> Sub.batch 
         [ 
             Mouse.moves MouseMoved,
-            Mouse.clicks MouseClicked
+            Mouse.clicks MouseClicked,
+            AnimationFrame.diffs (Tick<<Time.inSeconds)        
         ]
     )
 

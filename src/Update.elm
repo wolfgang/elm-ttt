@@ -34,3 +34,5 @@ update msg model =
 
     RandomMove coords -> 
         Game.makeMove O_ coords model (\model -> Cmd.none)
+
+    Tick deltaSeconds -> ({ model | elapsedTime = model.elapsedTime + deltaSeconds }, Cmd.none)

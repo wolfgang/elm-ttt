@@ -113,12 +113,14 @@ getOffset mult (row0, col0) (row2, col2) =
 
 drawDebugText model = 
     [ 
-        debugPrintAt (0, -50) (toString model.mousePosition)
+        debugPrintAt (0, -50) (toString model.mousePosition),
+        debugPrintAt (0, -60) (toString model.elapsedTime)
+
     ] 
     ++         
     (case model.highlightedCell of
         Nothing -> []
-        Just coords -> [debugPrintAt(0, 69) (toString model.highlightedCell)])
+        Just coords -> [debugPrintAt(0, -70) (toString model.highlightedCell)])
 
 
 drawCellAt : (Int, Int) -> Color -> Model -> Form
