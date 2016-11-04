@@ -35,7 +35,11 @@ createWinningAnimation gameState model =
         (startX, startY) = (startX0 + xOffset, startY0 + yOffset)
         (endX, endY) = (endX0 + (endRect.size - xOffset), endY0 + (endRect.size - yOffset))
     in
-        { startPoint = (startX, startY), endPoint = (endX, endY) }
+        { 
+            startPoint = (startX, startY), 
+            currentPoint = (startX, startY),
+            endPoint = (endX, endY) 
+        }
 
 
 getWinningLineOffset : Float -> (Int, Int) -> (Int, Int) -> (Float, Float)

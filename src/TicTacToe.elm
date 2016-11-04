@@ -34,7 +34,7 @@ init =
         highlightedCell = Nothing,
         board = Board.getInitialCells,
         gameState = (IN_PROGRESS, []),
-        winningAnimation = { startPoint = (0, 0), endPoint = (0, 0) },
+        winningAnimation = { startPoint = (0, 0), currentPoint = (0, 0), endPoint = (0, 0) },
         elapsedTime = 0
 
 

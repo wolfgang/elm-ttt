@@ -35,4 +35,41 @@ update msg model =
     RandomMove coords -> 
         Game.makeMove O_ coords model (\model -> Cmd.none)
 
-    Tick deltaSeconds -> ({ model | elapsedTime = model.elapsedTime + deltaSeconds }, Cmd.none)
+    Tick deltaSeconds -> 
+        (
+            { model | 
+                elapsedTime = model.elapsedTime + deltaSeconds,
+                winningAnimation = animateWinningLine model.winningAnimation deltaSeconds
+            }
+            ,
+            Cmd.none
+        )
+
+
+animateWinningLine : WinningAnimation -> Float -> WinningAnimation
+animateWinningLine winningAnimation deltaSeconds =
+    let 
+        (currentX, currentY) = winningAnimation.currentPoint
+        (endX, endY) = winningAnimation.endPoint
+        xDir = fsgn (endX - currentX)
+        yDir = fsgn (endY - currentY)
+        speed = 600
+        delta = speed*deltaSeconds
+    in
+        { winningAnimation | 
+            currentPoint = (currentX + xDir*delta, currentY + yDir*delta)
+        }
+
+
+fsgn : Float -> Float 
+fsgn x = 
+    if x < 0 then -1
+    else if x > 0 then 1
+    else 0
+
+
+
+
+
+
+

@@ -96,7 +96,7 @@ drawWinningLine model =
                 winningAnimation = model.winningAnimation
                 line = segment 
                         (toCollageCoords winningAnimation.startPoint model)
-                        (toCollageCoords winningAnimation.endPoint model)
+                        (toCollageCoords winningAnimation.currentPoint model)
                 baseLineStyle  = solid Color.black
             in
                 [ traced { baseLineStyle | width = 24 } line ]
