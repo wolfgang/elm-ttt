@@ -4,6 +4,7 @@ import Board
 import Msg exposing (Msg)
 import ListExt
 import BoardUI
+import WinningAnimation
 
 
 makeMove :  CellState -> (Int, Int) -> Model -> (Model -> Cmd Msg) -> (Model, Cmd Msg)
@@ -25,32 +26,7 @@ createWinningAnimation : List (Int, Int) -> Model -> WinningAnimation
 createWinningAnimation winningLine model =
     case winningLine of
         [] -> model.winningAnimation
-        _ ->
-            let
-                startCoords = ListExt.nth 0 winningLine (-1, -1)
-                endCoords = ListExt.nth 2 winningLine (-1, -1)
-                startRect = BoardUI.getCellRectAt startCoords model
-                endRect = BoardUI.getCellRectAt endCoords model
-                (xOffset, yOffset) = getWinningLineOffset (endRect.size/2) startCoords endCoords
-                (startX0, startY0) = startRect.position
-                (endX0, endY0) = endRect.position
-                (startX, startY) = (startX0 + xOffset, startY0 + yOffset)
-                (endX, endY) = (endX0 + (endRect.size - xOffset), endY0 + (endRect.size - yOffset))
-            in
-                { 
-                    startPoint = (startX, startY), 
-                    currentPoint = (startX, startY),
-                    endPoint = (endX, endY),
-                    speed = 300
-                }
-
-
-getWinningLineOffset : Float -> (Int, Int) -> (Int, Int) -> (Float, Float)
-getWinningLineOffset mult (row0, col0) (row2, col2) =
-    if row0 == row2 && col0 /= col2 then (mult, 0)
-    else if row0 /=row2 && col0 == col2 then (0, mult)
-    else if (row0, col0)==(0, 2) then (0, mult*2)
-    else (0, 0)
+        _ -> WinningAnimation.create winningLine model
 
 modelWithNewCellState : CellState -> (Int, Int) -> Model -> Model
 modelWithNewCellState state coords model = 
