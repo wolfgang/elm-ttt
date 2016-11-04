@@ -9,38 +9,40 @@ import BoardUI
 makeMove :  CellState -> (Int, Int) -> Model -> (Model -> Cmd Msg) -> (Model, Cmd Msg)
 makeMove cellState coords model nextCmdFn =
     let 
-        gameState = getGameState cellState modelWithMove
+        (gameState, winningLine) = getGameState cellState modelWithMove
         modelWithMove = modelWithNewCellState cellState coords model
         newModel = { modelWithMove | 
                         gameState = gameState, 
-                        winningAnimation = createWinningAnimation gameState model 
+                        winningAnimation = createWinningAnimation winningLine model 
                     }
     in 
-        if newModel.gameState /= (IN_PROGRESS, []) then
+        if newModel.gameState /= IN_PROGRESS then
             (newModel, Cmd.none)
         else
             (newModel, nextCmdFn newModel)
 
-createWinningAnimation : (GameState, List (Int, Int)) -> Model -> WinningAnimation
-createWinningAnimation gameState model =
-    let
-        (_, cellCoords) = gameState
-        startCoords = ListExt.nth 0 cellCoords (-1, -1)
-        endCoords = ListExt.nth 2 cellCoords (-1, -1)
-        startRect = BoardUI.getCellRectAt startCoords model
-        endRect = BoardUI.getCellRectAt endCoords model
-        (xOffset, yOffset) = getWinningLineOffset (endRect.size/2) startCoords endCoords
-        (startX0, startY0) = startRect.position
-        (endX0, endY0) = endRect.position
-        (startX, startY) = (startX0 + xOffset, startY0 + yOffset)
-        (endX, endY) = (endX0 + (endRect.size - xOffset), endY0 + (endRect.size - yOffset))
-    in
-        { 
-            startPoint = (startX, startY), 
-            currentPoint = (startX, startY),
-            endPoint = (endX, endY),
-            speed = 300
-        }
+createWinningAnimation : List (Int, Int) -> Model -> WinningAnimation
+createWinningAnimation winningLine model =
+    case winningLine of
+        [] -> model.winningAnimation
+        _ ->
+            let
+                startCoords = ListExt.nth 0 winningLine (-1, -1)
+                endCoords = ListExt.nth 2 winningLine (-1, -1)
+                startRect = BoardUI.getCellRectAt startCoords model
+                endRect = BoardUI.getCellRectAt endCoords model
+                (xOffset, yOffset) = getWinningLineOffset (endRect.size/2) startCoords endCoords
+                (startX0, startY0) = startRect.position
+                (endX0, endY0) = endRect.position
+                (startX, startY) = (startX0 + xOffset, startY0 + yOffset)
+                (endX, endY) = (endX0 + (endRect.size - xOffset), endY0 + (endRect.size - yOffset))
+            in
+                { 
+                    startPoint = (startX, startY), 
+                    currentPoint = (startX, startY),
+                    endPoint = (endX, endY),
+                    speed = 300
+                }
 
 
 getWinningLineOffset : Float -> (Int, Int) -> (Int, Int) -> (Float, Float)

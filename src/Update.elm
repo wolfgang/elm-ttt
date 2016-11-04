@@ -12,7 +12,7 @@ update msg model =
     NoOp -> (model, Cmd.none)
     MouseMoved position -> 
         case model.gameState of
-        (IN_PROGRESS, _) ->
+        IN_PROGRESS ->
             let 
                 newModel = { 
                     model | 
@@ -25,12 +25,12 @@ update msg model =
 
     MouseClicked position -> 
         case model.gameState of
-            (IN_PROGRESS, _) ->
+            IN_PROGRESS ->
                 case model.highlightedCell of
                     Nothing -> (model, Cmd.none)
                     Just coords -> 
                         Game.makeMove X_ coords model AI.makeRandomMoveCmd
-            _ -> ({ model | board = Board.getInitialCells, gameState = (IN_PROGRESS, []) }, Cmd.none)
+            _ -> ({ model | board = Board.getInitialCells, gameState = IN_PROGRESS }, Cmd.none)
 
     RandomMove coords -> 
         Game.makeMove O_ coords model (\model -> Cmd.none)

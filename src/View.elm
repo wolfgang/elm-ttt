@@ -91,7 +91,7 @@ drawHighlightedCell model =
 drawWinningLine : Model -> List Form
 drawWinningLine model =
     case model.gameState of
-        (WIN, _) ->
+        WIN ->
             let
                 winningAnimation = model.winningAnimation
                 line = segment 

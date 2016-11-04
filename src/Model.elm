@@ -12,7 +12,7 @@ type alias Model = {
     mousePosition: (Float, Float),
     highlightedCell: Maybe (Int, Int),
     board: List Cell,
-    gameState: (GameState, List (Int, Int)),
+    gameState: GameState,
     winningAnimation: WinningAnimation,
     elapsedTime: Float
 }
