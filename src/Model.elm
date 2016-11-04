@@ -32,5 +32,6 @@ type GameState
 type alias WinningAnimation = { 
         startPoint: (Float, Float), 
         currentPoint: (Float, Float),
-        endPoint: (Float, Float)
+        endPoint: (Float, Float),
+        speed: Float
     }

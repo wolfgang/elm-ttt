@@ -38,7 +38,8 @@ createWinningAnimation gameState model =
         { 
             startPoint = (startX, startY), 
             currentPoint = (startX, startY),
-            endPoint = (endX, endY) 
+            endPoint = (endX, endY),
+            speed = 300
         }
 
 
