@@ -35,10 +35,7 @@ init =
         highlightedCell = Nothing,
         board = Board.getInitialCells,
         gameState = IN_PROGRESS,
-        winningAnimation = WinningAnimation.init,
-        elapsedTime = 0
-
-
+        winningAnimation = WinningAnimation.init
     },
     Cmd.none
   )

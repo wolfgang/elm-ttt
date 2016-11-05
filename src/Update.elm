@@ -36,8 +36,7 @@ update msg model =
                         mousePosition = (toFloat position.x, toFloat position.y),
                         board = Board.getInitialCells, gameState = IN_PROGRESS,
                         winningAnimation = WinningAnimation.init
-                    }, 
-                    
+                    },                     
                     Cmd.none)
 
     RandomMove coords -> 
@@ -45,11 +44,7 @@ update msg model =
 
     Tick deltaSeconds -> 
         (
-            { model | 
-                elapsedTime = model.elapsedTime + deltaSeconds,
-                winningAnimation = WinningAnimation.animate model.winningAnimation deltaSeconds
-            }
-            ,
+            { model | winningAnimation = WinningAnimation.animate model.winningAnimation deltaSeconds },
             Cmd.none
         )
 

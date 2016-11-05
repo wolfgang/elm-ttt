@@ -103,14 +103,6 @@ drawWinningLine model =
         _ -> []
 
 
-
-getOffset : Float -> (Int, Int) -> (Int, Int) -> (Float, Float)
-getOffset mult (row0, col0) (row2, col2) =
-    if row0 == row2 && col0 /= col2 then (mult, 0)
-    else if row0 /=row2 && col0 == col2 then (0, mult)
-    else if (row0, col0)==(0, 2) then (0, mult*2)
-    else (0, 0)
-
 drawDebugText model =  []
     --[ 
     --    debugPrintAt (0, -50) (toString model.mousePosition),
