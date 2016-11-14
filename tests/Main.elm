@@ -1,13 +1,16 @@
 port module Main exposing (..)
 
 import ElmTestWorks
+import ListExtTest
+
 import Test.Runner.Node exposing (run)
 import Json.Encode exposing (Value)
 import Test exposing (describe)
 
 allTests =  
     describe "All tests"  [
-        ElmTestWorks.all
+        ElmTestWorks.all,
+        ListExtTest.all
     ]
 
 

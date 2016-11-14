@@ -10,5 +10,5 @@ all =
     describe "Elm-Test Some Test"
         [ test "Addition" <|
             \() ->
-                Expect.equal (3 + 7) 11
+                Expect.equal (3 + 7) 10
         ]
