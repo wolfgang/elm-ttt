@@ -5,6 +5,7 @@ import Expect
 
 import ListExt
 
+import Fuzz
 
 all : Test
 all =
@@ -17,7 +18,9 @@ all =
             test "return first element for index 0" <|
                 \() -> Expect.equal 1234 (ListExt.nth 0 [1234, 5678] -1)
             ,
-            test "return nth element for given index" <|
-                \() -> Expect.equal 2 (ListExt.nth 2 [0, 1, 2, 3, 4] -1)
+            fuzzWith {runs = 10} (Fuzz.intRange 0 9) "return nth element" <|
+                \index -> 
+                    let lst = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+                    in Expect.equal index (ListExt.nth index lst -1)
         ]
     ]
