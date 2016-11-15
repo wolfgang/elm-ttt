@@ -3,7 +3,7 @@ module BoardTest exposing (..)
 import Test exposing (..)
 import Expect
 import Board
-import Model exposing (Cell, CellState(..))
+import Model exposing (Model, Cell, CellState(..))
 import Init
 
 all : Test
@@ -22,24 +22,19 @@ all =
             ,
             test "setCellState sets cell state at given coords" <|
                 \() ->
-                    let 
-                        (model, _) = Init.init
-                        modelWithXAt11 = Board.setCellState X_ (1, 1) model
-                    in
-                        board 
-                            Empty Empty Empty
-                            Empty X_    Empty
-                            Empty Empty Empty
-                        |> Expect.equal modelWithXAt11.board
+                    modelWithBoard
+                        Empty Empty Empty
+                        Empty X_    Empty
+                        Empty Empty Empty
+                    |> Expect.equal (Board.setCellState X_ (1, 1) initialModel)
             ,
             test "getEmptyCells returns cell coords of empty cells" <|
                 \() ->
                     let 
-                        (model, _) = Init.init
-                        modelWithSomeEmptyCells = { model | board = board 
+                        modelWithSomeEmptyCells = modelWithBoard 
                                                     Empty Empty Empty 
                                                     X_ X_ X_ 
-                                                    O_ O_ Empty}
+                                                    O_ O_ Empty
                     in 
                         Expect.equal 
                             [(0, 0), (1, 0), (2, 0), (2, 2)] 
@@ -48,6 +43,16 @@ all =
 
         ]
 
+
+modelWithBoard : 
+        CellState -> CellState -> CellState -> 
+        CellState -> CellState -> CellState -> 
+        CellState -> CellState -> CellState 
+        -> Model
+
+modelWithBoard c00 c10 c20 c01 c11 c21 c02 c12 c22 = 
+    let (model, _) = Init.init
+    in { model | board = board c00 c10 c20 c01 c11 c21 c02 c12 c22 }
 
 board : CellState -> CellState -> CellState -> 
         CellState -> CellState -> CellState -> 
