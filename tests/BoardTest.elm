@@ -39,8 +39,17 @@ all =
                         Expect.equal 
                             [(0, 0), (1, 0), (2, 0), (2, 2)] 
                             (Board.getEmptyCells modelWithSomeEmptyCells)
-
-
+            ,
+            test "getCellStates returns reversed list of cell states for a list of cell coords" <|
+                \() ->
+                    let model = modelWithBoard 
+                                    Empty Empty Empty 
+                                    X_    X_    X_ 
+                                    O_    O_    Empty
+                    in
+                        Expect.equal 
+                            [O_, X_, Empty]
+                            (Board.getCellStates [(2, 0), (1, 1), (0, 2)] model)
         ]
 
 
