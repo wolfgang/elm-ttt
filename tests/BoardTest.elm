@@ -8,42 +8,45 @@ import Init
 
 all : Test
 all =
-    describe "Board" [
-        test "getInitialCells should return all empty cells" <|
-            \() -> 
-                board 
-                    Empty Empty Empty
-                    Empty Empty Empty
-                    Empty Empty Empty
-                |> Expect.equal Board.getInitialCells
-        ,
-        test "setCellState sets cell state at given coords" <|
-            \() ->
-                let 
-                    (model, _) = Init.init
-                    modelWithXAt11 = Board.setCellState X_ (1, 1) model
-                in
+    let
+        (initialModel, _) = Init.init
+    in
+        describe "Board" [
+            test "getInitialCells should return all empty cells" <|
+                \() -> 
                     board 
                         Empty Empty Empty
-                        Empty X_    Empty
                         Empty Empty Empty
-                    |> Expect.equal modelWithXAt11.board
-        ,
-        test "getEmptyCells returns cell coords of empty cells" <|
-            \() ->
-                let 
-                    (model, _) = Init.init
-                    modelWithSomeEmptyCells = { model | board = board 
-                                                Empty Empty Empty 
-                                                X_ X_ X_ 
-                                                O_ O_ Empty}
-                in 
-                    Expect.equal 
-                        [(0, 0), (1, 0), (2, 0), (2, 2)] 
-                        (Board.getEmptyCells modelWithSomeEmptyCells)
+                        Empty Empty Empty
+                    |> Expect.equal Board.getInitialCells
+            ,
+            test "setCellState sets cell state at given coords" <|
+                \() ->
+                    let 
+                        (model, _) = Init.init
+                        modelWithXAt11 = Board.setCellState X_ (1, 1) model
+                    in
+                        board 
+                            Empty Empty Empty
+                            Empty X_    Empty
+                            Empty Empty Empty
+                        |> Expect.equal modelWithXAt11.board
+            ,
+            test "getEmptyCells returns cell coords of empty cells" <|
+                \() ->
+                    let 
+                        (model, _) = Init.init
+                        modelWithSomeEmptyCells = { model | board = board 
+                                                    Empty Empty Empty 
+                                                    X_ X_ X_ 
+                                                    O_ O_ Empty}
+                    in 
+                        Expect.equal 
+                            [(0, 0), (1, 0), (2, 0), (2, 2)] 
+                            (Board.getEmptyCells modelWithSomeEmptyCells)
 
 
-    ]
+        ]
 
 
 board : CellState -> CellState -> CellState -> 
