@@ -4,6 +4,7 @@ import ElmTestWorks
 import ListExtTest
 import InitTest
 import BoardTest
+import ElmFunctions
 
 import Test.Runner.Node exposing (run)
 import Json.Encode exposing (Value)
@@ -14,7 +15,8 @@ allTests =
         ElmTestWorks.all,
         ListExtTest.all,
         InitTest.all,
-        BoardTest.all
+        BoardTest.all,
+        ElmFunctions.all
     ]
 
 
