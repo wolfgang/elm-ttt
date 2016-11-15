@@ -50,6 +50,17 @@ all =
                         Expect.equal 
                             [O_, X_, Empty]
                             (Board.getCellStates [(2, 0), (1, 1), (0, 2)] model)
+            ,
+            test "setCellState sets state of cell to given state at given coords" <|
+                \() ->
+                    let modelWithXAt12 = modelWithBoard                     
+                                            Empty Empty Empty 
+                                            Empty Empty Empty 
+                                            Empty X_ Empty 
+                    in
+                        Expect.equal 
+                            modelWithXAt12
+                            (Board.setCellState X_ (1, 2) initialModel)
         ]
 
 
