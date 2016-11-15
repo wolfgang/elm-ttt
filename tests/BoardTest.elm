@@ -11,11 +11,11 @@ all =
     describe "Board" [
         test "getInitialCells should return all empty cells" <|
             \() -> 
-                Expect.equal (board 
-                        Empty Empty Empty
-                        Empty Empty Empty
-                        Empty Empty Empty)
-                Board.getInitialCells
+                board 
+                    Empty Empty Empty
+                    Empty Empty Empty
+                    Empty Empty Empty
+                |> Expect.equal Board.getInitialCells
         ,
         test "setCellState sets cell state at given coords" <|
             \() ->
