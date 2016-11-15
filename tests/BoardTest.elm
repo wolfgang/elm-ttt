@@ -23,12 +23,11 @@ all =
                     (model, _) = Init.init
                     modelWithXAt11 = Board.setCellState X_ (1, 1) model
                 in
-                    Expect.equal (board 
+                    board 
                         Empty Empty Empty
                         Empty X_    Empty
                         Empty Empty Empty
-                    )
-                    modelWithXAt11.board
+                    |> Expect.equal modelWithXAt11.board
     ]
 
 board : CellState -> CellState -> CellState -> 
